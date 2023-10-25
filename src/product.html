@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product List</title>
+    <link rel="stylesheet" href="/dist/output.css">
+</head>
+
+<body class="h-screen bg-blue-100 flex flex-col items-center justify-center overflow-hidden">
+    <div class="text-center relative">
+        <h1 class=" mb-4 text-blue-400 font-semibold text-6xl">Google</h1>
+        <input type="text" id="search" placeholder="search here"
+            class="outline-none m-2 w-96 h-10 rounded-2xl px-2 shadow-2xl">
+        <ul class="w-96 h-60 hidden bg-white p-2  rounded-2xl shadow-2xl text-left absolute  overflow-y-scroll" id="ul"></ul>
+    </div>
+    <script>
+        let products = [
+            { name: 'John Doe', email: 'john@example.com' },
+            { name: 'Jane Doe', email: 'jane@example.com' },
+            { name: 'Bob Smith', email: 'bob@example.com' },
+            { name: 'Alice Johnson', email: 'alice@example.com' },
+            { name: 'Michael Davis', email: 'michael@example.com' },
+            { name: 'Sarah Wilson', email: 'sarah@example.com' },
+            { name: 'David Brown', email: 'david@example.com' },
+            { name: 'Jennifer Lee', email: 'jennifer@example.com' },
+            { name: 'James Taylor', email: 'james@example.com' },
+            { name: 'Jessica Evans', email: 'jessica@example.com' },
+            { name: 'Andrew Turner', email: 'andrew@example.com' },
+            { name: 'Michelle Harris', email: 'michelle@example.com' },
+            { name: 'Christopher Martin', email: 'christopher@example.com' },
+            { name: 'Amanda Jackson', email: 'amanda@example.com' },
+            { name: 'Brian Miller', email: 'brian@example.com' },
+            { name: 'Stephanie White', email: 'stephanie@example.com' },
+            { name: 'Kevin Clark', email: 'kevin@example.com' },
+            { name: 'Rebecca Baker', email: 'rebecca@example.com' },
+            { name: 'Jason Turner', email: 'jason@example.com' },
+            { name: 'Laura Davis', email: 'laura@example.com' },
+            { name: 'Matthew Walker', email: 'matthew@example.com' },
+            { name: 'Danielle Green', email: 'danielle@example.com' },
+            { name: 'Ryan Harris', email: 'ryan@example.com' },
+            { name: 'Nicole Anderson', email: 'nicole@example.com' },
+            { name: 'Timothy Wilson', email: 'timothy@example.com' },
+            { name: 'Katherine Harris', email: 'katherine@example.com' },
+            { name: 'Daniel Davis', email: 'daniel@example.com' },
+            { name: 'Kimberly Johnson', email: 'kimberly@example.com' },
+            { name: 'Kimberly Johnson', email: 'kimberly@example.com' },
+            { name: 'Kimberly Johnson', email: 'kimberly@example.com' },
+            { name: 'Kimberly Johnson', email: 'kimberly@example.com' },
+            { name: 'Kimberly Johnson', email: 'kimberly@example.com' },
+            { name: 'Kimberly Johnson', email: 'kimberly@example.com' },
+            { name: 'Kimberly Johnson', email: 'kimberly@example.com' },
+            { name: 'Mark Smith', email: 'mark@example.com' },
+            { name: 'Emily Taylor', email: 'emily@example.com' },
+            { name: 'Paul Turner', email: 'paul@example.com' }
+        ]
+
+
+
+        function search() {
+
+            let input = document.getElementById("search").value.toLowerCase();
+            let result = products.filter((product) => product.name.toLowerCase().startsWith(input));
+            console.log(result);
+
+            let list = document.getElementById("ul");
+            list.innerHTML = "";
+
+
+            if (input !== "") {
+                list.classList.remove("hidden");
+            } else {
+                list.classList.add("hidden");
+            }
+
+            result.forEach(element => {
+                let para = document.createElement("li");
+                para.classList.add("p-2");
+                para.innerHTML = element.name;
+                list.appendChild(para);
+            });
+
+
+            if (input == "") {
+                list.innerHTML = "";
+            }
+
+        }
+        document.getElementById("search").addEventListener("input", search);
+
+    </script>
+</body>
+
+</html>
