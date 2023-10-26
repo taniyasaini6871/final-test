@@ -13,7 +13,8 @@
         <h1 class=" mb-4 text-blue-400 font-semibold text-6xl">Google</h1>
         <input type="text" id="search" placeholder="search here"
             class="outline-none m-2 w-96 h-10 rounded-2xl px-2 shadow-2xl">
-        <ul class="w-96 h-60 hidden bg-white p-2  rounded-2xl shadow-2xl text-left absolute  overflow-y-scroll" id="ul"></ul>
+        <ul class="w-96 h-full max-h- hidden bg-white p-2  rounded-2xl shadow-2xl text-left absolute  overflow-y-scroll scrollbar-none"
+            id="ul"></ul>
     </div>
     <script>
         let products = [
@@ -60,32 +61,29 @@
 
         function search() {
 
-            let input = document.getElementById("search").value.toLowerCase();
-            let result = products.filter((product) => product.name.toLowerCase().startsWith(input));
-            console.log(result);
+            let input = document.getElementById("search").value.toLowerCase().trim();
 
+            let result = [];
             let list = document.getElementById("ul");
             list.innerHTML = "";
 
-
-            if (input !== "") {
+            if (input) {
                 list.classList.remove("hidden");
-            } else {
+                result = products.filter((product) => product.name.toLowerCase().startsWith(input));
+            }
+
+            if (result.length === 0) {
                 list.classList.add("hidden");
             }
 
-            result.forEach(element => {
-                let para = document.createElement("li");
-                para.classList.add("p-2");
-                para.innerHTML = element.name;
-                list.appendChild(para);
-            });
-
-
-            if (input == "") {
-                list.innerHTML = "";
+            if (result.length > 0) {
+                result.forEach(element => {
+                    let para = document.createElement("li");
+                    para.classList.add("p-2");
+                    para.innerHTML = element.name;
+                    list.appendChild(para);
+                })
             }
-
         }
         document.getElementById("search").addEventListener("input", search);
 
