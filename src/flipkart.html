@@ -9,7 +9,7 @@
 </head>
 
 <body class="bg-gray-white dark:bg-gray-300">
-    
+
     <script>
         "use strict"
         const products = [
@@ -254,8 +254,8 @@
                 }
             }
         ]
-         
-        
+
+
 
         // header created
         let header = document.createElement("header");
@@ -317,42 +317,39 @@
         form.classList.add("space-x-6", "relative");
         navBar.appendChild(form);
 
-       
-
-
         // created input and appended into form
         let inputAttribute = {
             tag: "input",
             atr: {
+                'className': "w-96 px-2 py-1 rounded mt-4 outline-none",
                 "type": "text",
                 "id": "search",
                 "placeholder": "Search for products,brands and more",
-
             }
         }
         let input = document.createElement(inputAttribute.tag);
-        input.classList.add("w-96", "px-2", "py-1", "rounded", "mt-4", "outline-none");
+        // input.classList.add("w-96", "px-2", "py-1", "rounded", "mt-4", "outline-none");
         Object.assign(input, inputAttribute.atr);
         form.appendChild(input);
-         
+
         // created ul and appened into form
         let ul = document.createElement("ul");
-        ul.classList.add("w-96", "hidden", "bg-white", "p-2", "shadow-xl", "text-left", "absolute", "border-t-2", "overflow-y-scroll", "scrollbar-none","dark:bg-black", "dark:text-white");
+        ul.classList.add("w-96", "hidden", "bg-white", "p-2", "shadow-xl", "text-left", "absolute", "border-t-2", "overflow-y-scroll", "scrollbar-none", "dark:bg-black", "dark:text-white");
         ul.setAttribute("id", "ul");
         form.appendChild(ul);
-         
+
         // login button
-        let btn =  document.createElement("button");
+        let btn = document.createElement("button");
         btn.innerHTML = "Login";
-        btn.classList.add("bg-white", "text-blue-500","dark:text-gray-500", "px-6", "py-1", "rounded", "font-semibold");
+        btn.classList.add("bg-white", "text-blue-500", "dark:text-gray-500", "px-6", "py-1", "rounded", "font-semibold");
         form.appendChild(btn);
 
-        
+
         // change mode button
         let toggle = document.createElement("button");
         toggle.innerHTML = "Dark Mode";
-        toggle.setAttribute("type","button");
-        toggle.classList.add("text-white","text-xs","border","h-8","px-2","mt-4","ml-4","rounded","font-bold");
+        toggle.setAttribute("type", "button");
+        toggle.classList.add("text-white", "text-xs", "border", "h-8", "px-2", "mt-4", "ml-4", "rounded", "font-bold");
         navBar.appendChild(toggle);
 
         function search() {
@@ -360,7 +357,7 @@
 
             let result = [];
             let list = document.getElementById("ul");
-            
+
             list.innerHTML = "";
 
             if (input) {
@@ -407,26 +404,164 @@
             }
         }
         document.getElementById("search").addEventListener("input", search);
-         
-        
+
+
         let flag = 1;
-        function darkMode(){
+        function darkMode() {
             let html = document.getElementById("html-js");
-            if(flag == 1){
+            if (flag == 1) {
                 toggle.innerHTML = "Light Mode";
-                html.setAttribute("class","dark");
-                flag = 0;    
-            } else if(flag == 0) {
+                html.setAttribute("class", "dark");
+                flag = 0;
+            } else if (flag == 0) {
                 toggle.innerHTML = "Dark Mode";
                 html.removeAttribute("class");
                 flag = 1;
             }
         };
-        toggle.addEventListener("click",darkMode);
+        toggle.addEventListener("click", darkMode);
 
-       
+        // code for to do list start here
+        let obj = {
+
+            TaskProject: function () {
+
+                // outermost div created and appended into body 
+                let outerContainer = document.createElement("div");
+                outerContainer.setAttribute("class", "w-full m-auto max-w-3xl space-y-6");
+                document.body.appendChild(outerContainer);
+
+                // form created and appended into div
+                let taskForm = document.createElement("form");
+                taskForm.setAttribute("class", "flex items-center justify-center");
+                taskForm.setAttribute("action", "#");
+                outerContainer.appendChild(taskForm);
+
+                // label created and appended into form
+                let formLabel = document.createElement("label");
+                formLabel.setAttribute("class", "font-semibold text-lg m-2");
+                formLabel.innerHTML = "Task Name";
+                taskForm.appendChild(formLabel);
+
+                // created input and appened into form
+                let formInput = document.createElement("input");
+                formInput.setAttribute("class", "border border-black m-2 outline-none align-middle rounded");
+                formInput.setAttribute("id", "inputJs");
+                formInput.setAttribute("type", "text");
+                taskForm.appendChild(formInput);
+
+                // created add button and appended into form
+                let formBtn = document.createElement("button");
+                formBtn.setAttribute("class", "border px-3 rounded bg-gray-200");
+                formBtn.setAttribute("type", "submit");
+                formBtn.setAttribute("id", "add-btn");
+                formBtn.innerHTML = "Add";
+                taskForm.appendChild(formBtn);
+
+                // created table and appened into div
+                let taskContainer = document.createElement("table");
+                taskContainer.setAttribute("class", "border-2 w-full max-w-3xl");
+                taskContainer.id = "task-container";
+                outerContainer.appendChild(taskContainer);
+
+                // thead created and appeneded into table
+                let tableHead = document.createElement("thead");
+                taskContainer.appendChild(tableHead);
+
+                // heading row created and appended into thead
+                let headRow = document.createElement("tr");
+                tableHead.appendChild(headRow);
+
+                let heading1 = document.createElement("th");
+                heading1.classList.add("w-1/2","p-2","bg-gray-200");
+                heading1.innerHTML = "Name Of task";
+                headRow.appendChild(heading1);
+
+                let heading2 = document.createElement("th");
+                heading2.innerHTML = "Action";
+                heading2.setAttribute("class", "border w-1/2 bg-gray-300");
+                headRow.appendChild(heading2);
+
+                this.selectInput = document.querySelector('#inputJs');
+                this.selectTable = document.querySelector("#task-container");
+
+                document.querySelector("#add-btn").addEventListener("click", this.addTask.bind(this));
+
+
+            },
+
+            addTask: function () {
+
+                if (this.selectInput.value.trim()) {
+
+                    let tableBody = document.createElement("tbody");
+                    this.selectTable.appendChild(tableBody);
+
+                    // tr created and appended into tbody
+                    let createTableRow = document.createElement("tr");
+                    createTableRow.classList.add("border");
+                    tableBody.appendChild(createTableRow);
+
+                    // first td created and appened into tr which contain input value
+                    let createTd1 = document.createElement("td");
+                    createTd1.classList.add("p-2","text-center","bg-gray-50","font-semibold")
+                    createTd1.innerHTML = this.selectInput.value;
+                    createTableRow.appendChild(createTd1);
+
+                    // second td created and appended into tr
+                    let createTd2 = document.createElement("td");
+                    createTd2.classList.add("border", "text-center", "space-x-5","bg-gray-100");
+                    createTableRow.appendChild(createTd2);
+
+                    // complete button created and appended into td2
+                    let completeBtn = document.createElement("button");
+                    completeBtn.innerHTML = "Completed";
+                    completeBtn.classList.add("border", "bg-green-200", "rounded", "px-2");
+                    createTd2.appendChild(completeBtn);
+
+                    // delete button created and appended into td2
+                    let deleteBtn = document.createElement("button");
+                    deleteBtn.classList.add("border", "bg-gray-200", "rounded", "px-2");
+                    deleteBtn.innerHTML = "Delete";
+                    createTd2.appendChild(deleteBtn);
+
+                    // removing table row when click on delete button
+                    deleteBtn.addEventListener("click", () => {
+                        tableBody.removeChild(createTableRow);
+                    })
+
+                    // changing complete and incomplete using chnageMode function
+                    let flags = 1;
+                    function changeMode() {
+                        if (flags == 1) {
+                            createTd1.classList.add("line-through");
+                            completeBtn.innerHTML = "Incompleted";
+                            completeBtn.classList.add("bg-red-200");
+                            flags = 0;
+                        } else if (flags == 0) {
+                            createTd1.classList.remove("line-through");
+                            completeBtn.innerHTML = "Completed";
+                            completeBtn.classList.remove("bg-red-200");
+                            flags = 1;
+                        }
+                    }
+
+                    completeBtn.addEventListener("click", changeMode);
+                    this.selectInput.value = "";
+                }
+            }
+        }
+
+        obj.TaskProject();
 
     </script>
+</body>
+
+</html>
+
+</script>
+
+
 </body>
 
 </html>
