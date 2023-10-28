@@ -468,6 +468,9 @@
                 let tableHead = document.createElement("thead");
                 taskContainer.appendChild(tableHead);
 
+                let tableBody = document.createElement("tbody");
+                taskContainer.appendChild(tableBody);
+
                 // heading row created and appended into thead
                 let headRow = document.createElement("tr");
                 tableHead.appendChild(headRow);
@@ -483,7 +486,7 @@
                 headRow.appendChild(heading2);
 
                 this.selectInput = document.querySelector('#inputJs');
-                this.selectTable = document.querySelector("#task-container");
+                this.selectTable = document.querySelector("#task-container tbody");
 
                 document.querySelector("#add-btn").addEventListener("click", this.addTask.bind(this));
 
@@ -494,13 +497,11 @@
 
                 if (this.selectInput.value.trim()) {
 
-                    let tableBody = document.createElement("tbody");
-                    this.selectTable.appendChild(tableBody);
 
                     // tr created and appended into tbody
                     let createTableRow = document.createElement("tr");
                     createTableRow.classList.add("border");
-                    tableBody.appendChild(createTableRow);
+                    this.selectTable.appendChild(createTableRow);
 
                     // first td created and appened into tr which contain input value
                     let createTd1 = document.createElement("td");
@@ -527,7 +528,7 @@
 
                     // removing table row when click on delete button
                     deleteBtn.addEventListener("click", () => {
-                        tableBody.removeChild(createTableRow);
+                        this.selectTable.removeChild(createTableRow);
                     })
 
                     // changing complete and incomplete using chnageMode function
