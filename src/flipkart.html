@@ -310,6 +310,7 @@
                     </path>
                 </svg></button>`;
 
+
         let formAttribute = {
             "action": "#",
         };
@@ -423,6 +424,8 @@
 
         // code for to do list start here
         let obj = {
+            taskArray: JSON.parse(localStorage.getItem("tasks")) || [],
+
 
             TaskProject: function () {
 
@@ -433,30 +436,73 @@
 
                 // form created and appended into div
                 let taskForm = document.createElement("form");
-                taskForm.setAttribute("class", "flex items-center justify-center");
                 taskForm.setAttribute("action", "#");
+                taskForm.setAttribute("id", "taskForm");
+                taskForm.setAttribute("class", "space-y-4");
                 outerContainer.appendChild(taskForm);
+
+                // DIV for label input and add button
+                let formDiv1 = document.createElement("div");
+                formDiv1.setAttribute('class', 'flex items-center gap-4')
+                taskForm.appendChild(formDiv1);
 
                 // label created and appended into form
                 let formLabel = document.createElement("label");
                 formLabel.setAttribute("class", "font-semibold text-lg m-2");
                 formLabel.innerHTML = "Task Name";
-                taskForm.appendChild(formLabel);
+                formDiv1.appendChild(formLabel);
 
                 // created input and appened into form
                 let formInput = document.createElement("input");
-                formInput.setAttribute("class", "border border-black m-2 outline-none align-middle rounded");
+                formInput.setAttribute("class", "border border-black m-2 p-2 outline-none align-middle rounded");
                 formInput.setAttribute("id", "inputJs");
                 formInput.setAttribute("type", "text");
-                taskForm.appendChild(formInput);
+                formInput.setAttribute("placeholder", "Enter task...");
+                formDiv1.appendChild(formInput);
 
                 // created add button and appended into form
                 let formBtn = document.createElement("button");
-                formBtn.setAttribute("class", "border px-3 rounded bg-gray-200");
+                formBtn.setAttribute("class", "border px-3 py-2 rounded bg-slate-200 ");
                 formBtn.setAttribute("type", "submit");
                 formBtn.setAttribute("id", "add-btn");
                 formBtn.innerHTML = "Add";
-                taskForm.appendChild(formBtn);
+                formDiv1.appendChild(formBtn);
+
+                // div for search and filter
+                let formDiv2 = document.createElement("div");
+                formDiv2.setAttribute("class", "flex gap-2 w-full")
+                taskForm.appendChild(formDiv2);
+
+                // input for searching tasks
+                let search = document.createElement("input");
+                search.setAttribute("placeholder", "search tasks");
+                search.setAttribute("class", "outline-none border border-black rounded w-full p-2")
+                search.setAttribute("type", "search");
+                search.setAttribute("id", "searchBox");
+                formDiv2.appendChild(search);
+
+                let filters = document.createElement("select");
+                filters.setAttribute("name", "filters");
+                filters.setAttribute("id", "filters");
+                filters.setAttribute("class", "border rounded border-black w-1/2 p-2 outline-none");
+                formDiv2.appendChild(filters);
+
+                let optionAll = document.createElement("option");
+                optionAll.innerHTML = "All";
+                optionAll.setAttribute("value", "all");
+                filters.appendChild(optionAll);
+
+                let optionComplete = document.createElement("option");
+                optionComplete.innerHTML = "Completed";
+                optionComplete.setAttribute("value", "completed");
+
+                filters.appendChild(optionComplete);
+
+                let optionInComplete = document.createElement("option");
+                optionInComplete.setAttribute("value", "Incompleted");
+                optionInComplete.innerHTML = "Incompleted";
+                filters.appendChild(optionInComplete);
+
 
                 // created table and appened into div
                 let taskContainer = document.createElement("table");
@@ -476,7 +522,7 @@
                 tableHead.appendChild(headRow);
 
                 let heading1 = document.createElement("th");
-                heading1.classList.add("w-1/2","p-2","bg-gray-200");
+                heading1.classList.add("w-1/2", "p-2", "bg-gray-200");
                 heading1.innerHTML = "Name Of task";
                 headRow.appendChild(heading1);
 
@@ -485,75 +531,195 @@
                 heading2.setAttribute("class", "border w-1/2 bg-gray-300");
                 headRow.appendChild(heading2);
 
-                this.selectInput = document.querySelector('#inputJs');
-                this.selectTable = document.querySelector("#task-container tbody");
 
-                document.querySelector("#add-btn").addEventListener("click", this.addTask.bind(this));
+            },
 
+
+            addToArray: function (value) {
+
+                let taskObject = {
+                    name: value,
+                    id: Date.now(),
+                    taskStatus: "incompleted",
+                };
+
+                this.taskArray.unshift(taskObject);
+                // console.log(this.taskArray);
+                localStorage.setItem("tasks", JSON.stringify(this.taskArray));
+                this.addToUi();
+
+            },
+            searchTask: function () {
+
+                let searchValue = document.getElementById("searchBox").value.toLowerCase().trim();
+
+                let filterTask = this.taskArray.filter((task) => task.name.toLowerCase().startsWith(searchValue));
+
+                let searchFilter = this.taskArray.filter((task) => task.name.toLowerCase().startsWith(searchValue) &&
+                    task.taskStatus === document.getElementById("filters").value.toLowerCase());
+
+                if (document.getElementById("filters").value.toLowerCase() === "all") {
+                    this.addToUi(filterTask);
+                } else {
+                    this.addToUi(searchFilter);
+                }
 
             },
 
             addTask: function () {
+                let inputValue = document.querySelector('#inputJs').value;
+                // console.log(inputValue);
+                if (inputValue.trim()) {
+                    this.addToArray(inputValue.trim())
+                }
+                document.querySelector('#inputJs').value = "";
+                if (!inputValue) {
+                    alert('Enter the task please');
+                }
+            },
 
-                if (this.selectInput.value.trim()) {
+            addToUi: function (arr) {
+                let taskList = arr ? arr : this.taskArray;
+                let tbody = document.querySelector("#task-container tbody");
+                tbody.innerHTML = "";
+                // console.log(taskList);
 
+                taskList.forEach((task) => {
 
                     // tr created and appended into tbody
                     let createTableRow = document.createElement("tr");
+                    createTableRow.setAttribute("data-Taskid", task.id);
                     createTableRow.classList.add("border");
-                    this.selectTable.appendChild(createTableRow);
+                    tbody.appendChild(createTableRow);
 
                     // first td created and appened into tr which contain input value
                     let createTd1 = document.createElement("td");
-                    createTd1.classList.add("p-2","text-center","bg-gray-50","font-semibold")
-                    createTd1.innerHTML = this.selectInput.value;
+                    createTd1.classList.add("p-2", "text-center", "bg-gray-50", "font-semibold")
+                    createTd1.innerHTML = task.name;
                     createTableRow.appendChild(createTd1);
 
                     // second td created and appended into tr
                     let createTd2 = document.createElement("td");
-                    createTd2.classList.add("border", "text-center", "space-x-5","bg-gray-100");
+                    createTd2.classList.add("border", "text-center", "space-x-5", "bg-gray-100");
                     createTableRow.appendChild(createTd2);
 
                     // complete button created and appended into td2
                     let completeBtn = document.createElement("button");
-                    completeBtn.innerHTML = "Completed";
-                    completeBtn.classList.add("border", "bg-green-200", "rounded", "px-2");
+                    completeBtn.innerHTML = task.taskStatus !== "completed" ? "Incompleted" : "Completed";
+                    completeBtn.setAttribute("type", "button");
+                    completeBtn.classList.add("border", "rounded", "px-2");
+
+                    if (task.taskStatus === "completed") {
+                        createTd1.classList.add("line-through");
+                        completeBtn.classList.add("bg-green-200");
+                    } else {
+                        completeBtn.classList.add("bg-red-200");
+                    }
+
                     createTd2.appendChild(completeBtn);
 
                     // delete button created and appended into td2
                     let deleteBtn = document.createElement("button");
-                    deleteBtn.classList.add("border", "bg-gray-200", "rounded", "px-2");
+                    deleteBtn.setAttribute("type", "button");
+                    deleteBtn.classList.add("border", "rounded", "px-2");
                     deleteBtn.innerHTML = "Delete";
                     createTd2.appendChild(deleteBtn);
 
                     // removing table row when click on delete button
-                    deleteBtn.addEventListener("click", () => {
-                        this.selectTable.removeChild(createTableRow);
+                    deleteBtn.addEventListener("click", (e) => {
+
+                        let taskId = e.target.parentNode.parentNode.getAttribute('data-Taskid');
+
+                        obj.taskArray = this.taskArray.filter(task => task.id !== +taskId);
+
+                        localStorage.setItem("tasks", JSON.stringify(obj.taskArray));
+
+                        createTableRow.remove();
+                        // console.log(this.taskArray);
                     })
 
-                    // changing complete and incomplete using chnageMode function
-                    let flags = 1;
-                    function changeMode() {
+
+                    // changing complete and incomplete using changeMode function
+                    let flags = 0;
+                    function changeMode(e) {
+                        let taskId = e.target.parentNode.parentNode.getAttribute('data-Taskid');
+                        const taskIndex = obj.taskArray.findIndex(task => task.id === +taskId);
                         if (flags == 1) {
                             createTd1.classList.add("line-through");
-                            completeBtn.innerHTML = "Incompleted";
-                            completeBtn.classList.add("bg-red-200");
+                            completeBtn.innerHTML = "Completed";
+                            completeBtn.classList.remove("bg-red-200");
+                            completeBtn.classList.add("bg-green-200");
+                            obj.taskArray[taskIndex].taskStatus = "completed";
                             flags = 0;
                         } else if (flags == 0) {
                             createTd1.classList.remove("line-through");
-                            completeBtn.innerHTML = "Completed";
-                            completeBtn.classList.remove("bg-red-200");
+                            completeBtn.innerHTML = "Incompleted";
+                            completeBtn.classList.remove("bg-green-200");
+                            completeBtn.classList.add("bg-red-200");
+                            obj.taskArray[taskIndex].taskStatus = "Incompleted";
                             flags = 1;
                         }
+                        localStorage.setItem('tasks', JSON.stringify(obj.taskArray));
                     }
 
-                    completeBtn.addEventListener("click", changeMode);
-                    this.selectInput.value = "";
+                    completeBtn.addEventListener("click", (e) => {
+                        changeMode(e);
+                    });
+
+                })
+
+            },
+
+            filterTasks: function () {
+                let select = document.getElementById("filters");
+                let searchValue = document.getElementById("searchBox").value.toLowerCase().trim();
+                if (select.value.toLowerCase() === "all" ) {
+                    if (searchValue) {
+                        const allSearch = this.taskArray.filter(item => item.name.toLowerCase().startsWith(searchValue));
+                        this.addToUi(allSearch);
+                    } else {
+                        this.addToUi(this.taskArray);
+                    }
+                } else if (select.value.toLowerCase() === "completed") {
+                    const completedTasks = this.taskArray.filter(item => item.taskStatus.toLowerCase() === "completed");
+
+                    if (searchValue) {
+                        const completedSearch = completedTasks.filter(item => item.name.toLowerCase().startsWith(searchValue));
+                        this.addToUi(completedSearch);
+                    } else {
+                        this.addToUi(completedTasks);
+                    }
+                }
+                else if (select.value.toLowerCase() === "incompleted") {
+
+                    const IncompletedTasks = this.taskArray.filter(item => item.taskStatus.toLowerCase() === "incompleted");
+
+                    if (searchValue) {
+                        const IncompletedSearch = IncompletedTasks.filter(item => item.name.toLowerCase().startsWith(searchValue));
+                        this.addToUi(IncompletedSearch);
+                    } else {
+                        this.addToUi(IncompletedTasks);
+                    }
                 }
             }
         }
 
         obj.TaskProject();
+        window.onload = obj.addToUi();
+
+        document.querySelector('#taskForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            obj.addTask();
+        })
+
+        document.querySelector("#searchBox").addEventListener('input', (e) => {
+            obj.searchTask();
+        });
+
+        document.getElementById("filters").addEventListener("change", (e) => {
+            obj.filterTasks();
+        })
+
 
     </script>
 </body>
