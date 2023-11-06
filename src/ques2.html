@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>STOP START BUTTON</title>
+    <link rel="stylesheet" href="/dist/output.css">
+</head>
+
+<body>
+    <main class="flex flex-col justify-center items-center gap-4">
+        <div class=" flex justify-center gap-3 mt-8">
+            <button id="btn1-js" type="button" class="border-2 px-2 rounded bg-slate-100">Start</button>
+            <button id="btn2-js" type="button" class="border-2 px-2 rounded bg-slate-100">Stop</button>
+        </div>
+        <ul id="list-js" class="bg-slate-100 border rounded"></ul>
+    </main>
+
+    <script>
+
+        /* Ques 2 - Write a function to create two button start or stop. 
+         When we click start it will start printing hii until we click on stop.*/
+
+        function printHii() {
+            let timer;
+            let btn1 = document.querySelector("#btn1-js");
+            let ul = document.querySelector("#list-js");
+            btn1.addEventListener("click", () => {
+
+                timer = setInterval(function add() { 
+                    let list = document.createElement("li");
+                    list.classList.add("p-2","px-4");
+                    list.innerHTML = "Hii, How are you?";
+                    ul.appendChild(list);
+                }, 1000)
+            })
+
+            let btn2 = document.querySelector("#btn2-js");
+            btn2.addEventListener("click", () => {
+                clearInterval(timer);
+            })
+        }
+        printHii();
+
+    </script>
+</body>
+
+</html>
