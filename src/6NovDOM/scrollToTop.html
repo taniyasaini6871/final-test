@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scroll to Top</title>
+    <link rel="stylesheet" href="/dist/output.css">
+</head>
+
+<body class="relative">
+    <main>
+        <section class="h-screen w-full bg-purple-200 border text-center flex items-center justify-center gap-2">
+            <div class="w-1/2 p-4">
+                <h1 class="font-bold text-3xl pb-5 text-purple-400">Welcome To Purple Theme</h1>
+                <p class="text-left text-purple-400 border font-semibold border-purple-900 rounded-lg p-6 bg-sky-100">
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Tempora
+                    fugit voluptas iusto recusandae aliquid
+                    illo voluptatibus autem, rem exercitationem alias in molestiae corporis qui amet ullam magnam
+                    architecto
+                    tenetur placeat quaerat similique culpa consequatur natus aliquam. Suscipit sit temporibus in
+                    exercitationem commodi necessitatibus laudantium, ipsa laborum quis, quos asperiores sed nostrum.
+                    Debitis, harum! Illum, fugit libero! Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                    Veritatis
+                    voluptatem consequuntur autem dicta accusantium nisi maiores sequi doloribus sunt. Illo magnam non,
+                    sed
+                    quod totam iure tempora aperiam provident consequuntur inventore illum repellat, beatae deserunt
+                    delectus! Deleniti, aspernatur labore dolorem perferendis autem nulla non ex, dolorum ab possimus
+                    modi
+                    repellendus rem animi numquam iure libero dolore, recusandae accusantium eaque illum. Dolorem
+                    possimus
+                    optio veritatis ut aspernatur, veniam qui, eligendi eos quam aliquam animi, laudantium magni
+                    adipisci
+                    repellendus quis.</p>
+            </div>
+        </section>
+
+        <section class="h-screen w-full bg-pink-100 border text-center flex items-center justify-center gap-2">
+            <div class="w-full mx-28 p-4">
+                <h1 class="font-bold text-3xl pb-5 text-pink-300">Welcome To Pink Theme</h1>
+                <div class="flex gap-10">
+                    <p
+                        class="text-left font-semibold text-purple-400 border border-purple-900 rounded-lg p-6  bg-sky-100">
+                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Tempora
+                        fugit voluptas iusto recusandae aliquid
+                        illo voluptatibus autem, rem exercitationem alias in molestiae corporis qui amet ullam magnam
+                        architecto
+                        tenetur placeat quaerat similique culpa consequatur natus aliquam. Suscipit sit temporibus in
+                        exercitationem commodi necessitatibus laudantium, ipsa laborum quis, quos asperiores sed
+                        nostrum.
+                        Debitis, harum! Illum, fugit libero! Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                        Veritatis
+                        voluptatem consequuntur autem dicta accusantium nisi maiores sequi doloribus sunt. Illo magnam
+                        non,
+                        sed
+                        .</p>
+
+                    <p
+                        class="text-left font-semibold text-purple-400 border border-purple-900 rounded-lg p-6  bg-sky-100">
+                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Tempora
+                        fugit voluptas iusto recusandae aliquid
+                        illo voluptatibus autem, rem exercitationem alias in molestiae corporis qui amet ullam magnam
+                        architecto
+                        tenetur placeat quaerat similique culpa consequatur natus aliquam. Suscipit sit temporibus in
+                        exercitationem commodi necessitatibus laudantium, ipsa laborum quis, quos asperiores sed
+                        nostrum.
+                        Debitis, harum! Illum, fugit libero! Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                        Veritatis
+                        voluptatem consequuntur autem dicta accusantium nisi maiores sequi doloribus sunt. Illo magnam.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <section class="h-screen w-full bg-purple-200 border text-center flex items-center justify-center gap-2">
+            <div class="w-1/2 p-4">
+                <h1 class="font-bold text-3xl pb-5 text-purple-400">Welcome To Purple Theme</h1>
+                <p class="text-left text-purple-400 border font-semibold border-purple-900 rounded-lg p-6 bg-sky-100">
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Tempora
+                    fugit voluptas iusto recusandae aliquid
+                    illo voluptatibus autem, rem exercitationem alias in molestiae corporis qui amet ullam magnam
+                    architecto
+                    tenetur placeat quaerat similique culpa consequatur natus aliquam. Suscipit sit temporibus in
+                    exercitationem commodi necessitatibus laudantium, ipsa laborum quis, quos asperiores sed nostrum.
+                    Debitis, harum! Illum, fugit libero! Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                    Veritatis
+                    voluptatem consequuntur autem dicta accusantium nisi maiores sequi doloribus sunt. Illo magnam non,
+                    sed
+                    quod totam iure tempora aperiam provident consequuntur inventore illum repellat, beatae deserunt
+                    delectus! Deleniti, aspernatur labore dolorem perferendis autem nulla non ex, dolorum ab possimus
+                    modi
+                    repellendus rem animi numquam iure libero dolore, recusandae accusantium eaque illum. Dolorem
+                    possimus
+                    optio veritatis ut aspernatur, veniam qui, eligendi eos quam aliquam animi, laudantium magni
+                    adipisci
+                    repellendus quis.</p>
+            </div>
+        </section>
+    </main>
+    <script>
+
+        // function to make scrolling to top 
+        function scrolltoTop() {
+
+            let scrollBtn = document.createElement("button");
+            scrollBtn.innerHTML = "Top";
+            let scrollAttribute = {
+                "className": "rounded p-2 fixed right-4 bottom-4 hidden border-4 border-purple-500 bg-pink-200 rounded-full font-bold text-purple-500",
+                "type": "button",
+            }
+            Object.assign(scrollBtn, scrollAttribute);
+            document.body.appendChild(scrollBtn);
+
+            document.addEventListener("scroll", () => {
+
+                if (window.pageYOffset > innerHeight / 5) {
+                    scrollBtn.classList.remove("hidden");
+
+                }
+                else if (window.pageYOffset < innerHeight / 5) {
+                    scrollBtn.classList.add("hidden");
+                }
+            })
+
+            scrollBtn.addEventListener("click", () => {
+                window.scrollTo(0, 0);
+            })
+            
+        }
+        scrolltoTop();
+    </script>

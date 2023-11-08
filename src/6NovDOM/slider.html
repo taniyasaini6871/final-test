@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slider</title>
+    <link rel="stylesheet" href="/dist/output.css">
+</head>
+
+<body>
+    <main class="flex justify-center items-center min-h-screen">
+
+        <div id="box-js" class="w-80 h-3 bg-slate-300 border rounded relative">
+            <p id="count-js" class="absolute top-7"></p>
+            <div id="slider-js" class="h-6 w-3  bg-blue-700 rounded absolute -bottom-1/2 cursor-pointer">
+            </div>
+        </div>
+        
+    </main>
+    <script>
+
+        function slider() {
+            let box = document.querySelector("#box-js");
+            let slider = document.querySelector("#slider-js");
+            let count = document.querySelector("#count-js");
+
+            slider.onmousedown = function (e) {
+                e.preventDefault();
+                let left = Math.floor(slider.getBoundingClientRect().left);
+                let diff = e.clientX - left;
+
+                document.addEventListener("mousemove", function sliderPosition(e) {
+
+                    let newsliderPosition = e.clientX - diff - box.getBoundingClientRect().left;
+
+                    if (newsliderPosition < 0) {
+                        newsliderPosition = 0;
+                    }
+
+                    let maxPosition = box.offsetWidth - slider.offsetWidth;
+
+                    if (newsliderPosition > maxPosition) {
+                        newsliderPosition = maxPosition;
+                    }
+                    count.innerHTML = `count is ${Math.floor(newsliderPosition / (maxPosition / 100))}`;
+
+                    slider.style.left = newsliderPosition + "px";
+
+                    document.addEventListener("mouseup", () => {
+                        document.removeEventListener("mousemove", sliderPosition);
+                    })
+                })
+            }
+
+
+            box.addEventListener("click", (e) => {
+
+                let left = Math.floor(box.getBoundingClientRect().left);
+                let maxPosition = box.offsetWidth - slider.offsetWidth;
+                let diff = e.clientX - left;
+
+                if (diff > maxPosition) {
+                    diff = maxPosition;
+                }
+
+                slider.style.left = diff + "px";
+            })
+        }
+        slider();
+
+    </script>
+</body>
+
+</html>

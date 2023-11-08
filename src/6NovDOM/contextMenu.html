@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menu</title>
+    <link rel="stylesheet" href="/dist/output.css">
+</head>
+
+<body class="min-h-screen relative">
+    <main>
+        <h1 class="text-center font-semibold py-2">Click Anywhere on the Screen</h1>
+
+        <ul class="menu-container absolute invisible w-72 border-4 px-2 py-4 space-y-2 rounded-md bg-white shadow-xl">
+            <li>Back</li>
+            <li>Forward</li>
+            <li>Undo</li>
+            <li>Redo</li>
+            <li>Cut</li>
+        </ul>
+
+    </main>
+    <script>
+
+        function contextMenu(e) {
+
+            e.preventDefault();
+            let container = document.querySelector(".menu-container");
+            container.classList.remove("invisible");
+
+            let menuWidth = container.offsetWidth;
+            let menuHeight = container.offsetHeight;
+
+            container.style.left = e.clientX + 'px';
+            container.style.top = e.clientY + 'px';
+
+            if (e.clientX + menuWidth > innerWidth) {
+                container.style.left = e.clientX - menuWidth + "px";
+            }
+
+            if (e.clientY + menuHeight > innerHeight) {
+                container.style.top = e.clientY - menuHeight + "px";
+
+            }
+
+            document.addEventListener("click", () => {
+                container.classList.add("invisible");
+            })
+
+        }
+
+        document.addEventListener("contextmenu", contextMenu);
+
+    </script>
+</body>
+
+</html>
