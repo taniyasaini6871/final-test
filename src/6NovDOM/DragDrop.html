@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Drag and Drop</title>
+    <link rel="stylesheet" href="/dist/output.css">
+</head>
+
+<body>
+    <script>
+        let obj = {
+            taskArray: JSON.parse(localStorage.getItem("tasks")) || [],
+
+
+            TaskProject: function () {
+
+                // outermost div created and appended into body
+                let outerContainer = document.createElement("div");
+                outerContainer.setAttribute("class", "w-full m-auto max-w-3xl space-y-6");
+                document.body.appendChild(outerContainer);
+
+                // form created and appended into div
+                let taskForm = document.createElement("form");
+                taskForm.setAttribute("action", "#");
+                taskForm.setAttribute("id", "taskForm");
+                taskForm.setAttribute("class", "space-y-4");
+                outerContainer.appendChild(taskForm);
+
+                // DIV for label input and add button
+                let formDiv1 = document.createElement("div");
+                formDiv1.setAttribute('class', 'flex items-center gap-4')
+                taskForm.appendChild(formDiv1);
+
+                // label created and appended into form
+                let formLabel = document.createElement("label");
+                formLabel.setAttribute("class", "font-semibold text-lg m-2");
+                formLabel.innerHTML = "Task Name";
+                formDiv1.appendChild(formLabel);
+
+                // created input and appened into form
+                let formInput = document.createElement("input");
+                formInput.setAttribute("class", "border border-black m-2 p-2 outline-none align-middle rounded");
+                formInput.setAttribute("id", "inputJs");
+                formInput.setAttribute("type", "text");
+                formInput.setAttribute("placeholder", "Enter task...");
+                formDiv1.appendChild(formInput);
+
+                // created add button and appended into form
+                let formBtn = document.createElement("button");
+                formBtn.setAttribute("class", "border px-3 py-2 rounded bg-slate-200 ");
+                formBtn.setAttribute("type", "submit");
+                formBtn.setAttribute("id", "add-btn");
+                formBtn.innerHTML = "Add";
+                formDiv1.appendChild(formBtn);
+
+                let boundry = document.createElement("div");
+                boundry.setAttribute("class", "flex justify-evenly h-full w-full");
+                outerContainer.appendChild(boundry);
+
+                let boundry1 = document.createElement("div");
+                boundry1.setAttribute("class", "border h-full");
+                boundry.appendChild(boundry1);
+
+                let boundry2 = document.createElement("div");
+                // boundry2.setAttribute("class", "flex gap-2");
+                boundry.appendChild(boundry2);
+
+                let boundry3 = document.createElement("div");
+                // boundry3.setAttribute("class", "flex gap-2");
+                boundry.appendChild(boundry3);
+
+                // created table for all tasks and appened into div
+                let alltaskContainer = document.createElement("table");
+                alltaskContainer.setAttribute("class", "w-full");
+                alltaskContainer.id = "alltask-container";
+                boundry1.appendChild(alltaskContainer);
+
+                let allCaption = document.createElement("caption");
+                allCaption.innerHTML = "All Tasks";
+                alltaskContainer.appendChild(allCaption);
+
+                // thead created and appeneded into table
+                let tableHead = document.createElement("thead");
+                alltaskContainer.appendChild(tableHead);
+
+                let tableBody = document.createElement("tbody");
+                tableBody.classList.add("w-full")
+                alltaskContainer.appendChild(tableBody);
+
+                // heading row created and appended into thead
+                let headRow = document.createElement("tr");
+                headRow.setAttribute("class", "w-full")
+                tableHead.appendChild(headRow);
+
+                let heading1 = document.createElement("th");
+                heading1.classList.add("p-2", "bg-gray-200", "w-1/2");
+                heading1.innerHTML = "Name Of task";
+                headRow.appendChild(heading1);
+
+                let heading2 = document.createElement("th");
+                heading2.innerHTML = "Action";
+                heading2.setAttribute("class", "w-1/2 border bg-gray-300");
+                headRow.appendChild(heading2);
+
+                // incomplete task table box
+                let incompletetaskContainer = document.createElement("table");
+                incompletetaskContainer.setAttribute("class", "border-2 w-full max-w-3xl");
+                incompletetaskContainer.id = "incompletetask-container";
+                boundry2.appendChild(incompletetaskContainer);
+
+                let incompleteCaption = document.createElement("caption");
+                incompleteCaption.innerHTML = "Incomplete Tasks";
+                incompletetaskContainer.appendChild(incompleteCaption);
+
+                let tableHeadIncomplete = document.createElement("thead");
+                incompletetaskContainer.appendChild(tableHeadIncomplete);
+
+                let tableBodyIncomplete = document.createElement("tbody");
+                incompletetaskContainer.appendChild(tableBodyIncomplete);
+
+                let headRowIncomplete = document.createElement("tr");
+                tableHeadIncomplete.appendChild(headRowIncomplete);
+
+                let heading1Incomplete = document.createElement("th");
+                heading1Incomplete.classList.add("w-1/2", "p-2", "bg-gray-200");
+                heading1Incomplete.innerHTML = "Name Of task";
+                headRowIncomplete.appendChild(heading1Incomplete);
+
+                let heading2Incomplete = document.createElement("th");
+                heading2Incomplete.innerHTML = "Action";
+                heading2Incomplete.setAttribute("class", "border w-1/2 bg-gray-300");
+                headRowIncomplete.appendChild(heading2Incomplete);
+
+                // complete task table box
+                let completetaskContainer = document.createElement("table");
+                completetaskContainer.setAttribute("class", "border-2 w-full max-w-3xl");
+                completetaskContainer.id = "completetask-container";
+                boundry3.appendChild(completetaskContainer);
+
+                let completeCaption = document.createElement("caption");
+                completeCaption.innerHTML = "Complete Tasks";
+                completetaskContainer.appendChild(completeCaption);
+
+                let tableHeadComplete = document.createElement("thead");
+                completetaskContainer.appendChild(tableHeadComplete);
+
+                let tableBodyComplete = document.createElement("tbody");
+                completetaskContainer.appendChild(tableBodyComplete);
+
+                let headRowComplete = document.createElement("tr");
+                tableHeadComplete.appendChild(headRowComplete);
+
+                let heading1Complete = document.createElement("th");
+                heading1Complete.classList.add("w-1/2", "p-2", "bg-gray-200");
+                heading1Complete.innerHTML = "Name Of task";
+                headRowComplete.appendChild(heading1Complete);
+
+                let heading2Complete = document.createElement("th");
+                heading2Complete.innerHTML = "Action";
+                heading2Complete.setAttribute("class", "border w-1/2 bg-gray-300");
+                headRowComplete.appendChild(heading2Complete);
+
+            },
+
+            addToArray: function (value) {
+
+                let taskObject = {
+                    name: value,
+                    id: Date.now(),
+                    taskStatus: "incompleted",
+                };
+
+                this.taskArray.unshift(taskObject);
+                // console.log(this.taskArray);
+                localStorage.setItem("tasks", JSON.stringify(this.taskArray));
+                this.addToUi();
+
+            },
+
+            addTask: function () {
+                let inputValue = document.querySelector('#inputJs').value;
+                // console.log(inputValue);
+                if (inputValue.trim()) {
+                    this.addToArray(inputValue.trim())
+                }
+                document.querySelector('#inputJs').value = "";
+                if (!inputValue) {
+                    alert('Enter the task please');
+                }
+            },
+
+            addToUi: function (arr) {
+                let taskList = arr ? arr : this.taskArray;
+                let tbody = document.querySelector("#alltask-container tbody");
+                tbody.innerHTML = "";
+
+
+                taskList.forEach((task) => {
+
+                    // tr created and appended into tbody
+                    let createTableRow = document.createElement("tr");
+                    createTableRow.setAttribute("data-Taskid", task.id);
+                    createTableRow.className = "row";
+                    createTableRow.setAttribute("draggable", "true");
+                    createTableRow.classList.add("border", "w-full", "cursor-pointer");
+                    tbody.appendChild(createTableRow);
+
+                    // first td created and appened into tr which contain input value
+                    let createTd1 = document.createElement("td");
+                    createTd1.id = "data";
+                    createTd1.classList.add("p-2", "text-center", "font-semibold")
+                    createTd1.innerHTML = task.name;
+                    createTableRow.appendChild(createTd1);
+
+                    // second td created and appended into tr
+                    let createTd2 = document.createElement("td");
+                    createTd2.classList.add("text-center", "space-x-5");
+                    createTableRow.appendChild(createTd2);
+
+                    let deleteBtn = document.createElement("button");
+                    deleteBtn.setAttribute("type", "button");
+                    deleteBtn.classList.add("border", "rounded", "px-2");
+                    deleteBtn.innerHTML = "Delete";
+                    createTd2.appendChild(deleteBtn);
+
+                    // removing table row when click on delete button
+                    deleteBtn.addEventListener("click", (e) => {
+
+                        let taskId = e.target.parentNode.parentNode.getAttribute('data-Taskid');
+
+                        obj.taskArray = this.taskArray.filter(task => task.id !== +taskId);
+                        console.log(obj.taskArray);
+
+                        localStorage.setItem("tasks", JSON.stringify(obj.taskArray));
+
+                        createTableRow.remove();
+                        // console.log(this.taskArray);
+                    })
+
+                   
+
+                });
+            },
+
+            DragDrop: function () {
+                    let draggableRows = document.querySelectorAll(".row");
+                    let alltaskBox = document.querySelector("#alltask-container");
+                    let incompleteBox = document.querySelector("#incompletetask-container");
+                    let completeBox = document.querySelector("#completetask-container");
+                    let tdData = document.querySelector("#data");
+
+                    let selected = null;
+
+                    for (row of draggableRows) {
+                        row.addEventListener("dragstart", function (e) {
+                            selected = e.target;
+                            let taskId = selected.getAttribute('data-Taskid');
+                            const taskIndex = obj.taskArray.findIndex(task => task.id === +taskId);
+
+
+                            incompleteBox.addEventListener("dragover", function (e) {
+                                e.preventDefault();
+                            })
+
+                            incompleteBox.addEventListener("drop", function (e) {
+                                if (selected) {
+                                    obj.taskArray[taskIndex].taskStatus = "pending";
+                                    localStorage.setItem('tasks', JSON.stringify(obj.taskArray));
+                                    
+                                    incompleteBox.appendChild(selected);
+                                    selected.classList.remove("line-through");
+                                    selected = null;
+                                }
+                            })
+
+                            completeBox.addEventListener("dragover", function (e) {
+                                e.preventDefault();
+                            })
+
+                            completeBox.addEventListener("drop", function (e) {
+
+                                if (selected) {
+                                    obj.taskArray[taskIndex].taskStatus = "completed";
+                                    localStorage.setItem('tasks', JSON.stringify(obj.taskArray));
+                                    
+                                    completeBox.appendChild(selected);
+                                    selected.classList.add("line-through");
+                                    selected = null;
+                                }
+                            })
+                        })
+                    }
+                }
+            
+            }
+
+        obj.TaskProject();
+        window.onload = function () {
+            obj.addToUi();
+            obj.DragDrop(); // Call DragDrop after addToUi
+        }
+
+        
+        document.querySelector('#taskForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            obj.addTask();
+        });
+
+
+    </script>
+</body>
+
+</html>

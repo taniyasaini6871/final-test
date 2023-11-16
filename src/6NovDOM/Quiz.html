@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz</title>
+    <link rel="stylesheet" href="/dist/output.css">
+</head>
+
+<body>
+    <main>
+        <form action="#" class="flex flex-col min-h-screen justify-center items-center space-y-2" id="quizContainer">
+            <div class="quiz-header border-2 py-6 px-4 space-y-2 rounded  bg-gray-100 w-2/5">
+                <h1 id="question" class="slide-up">question text</h1>
+
+                <div>
+                    <input type="radio" name="answer" id="a" class="answer">
+                    <label for="a" id="a_text">Answer</label>
+                </div>
+                <div>
+                    <input type="radio" name="answer" id="b" class="answer">
+                    <label for="b" id="b_text">Answer</label>
+                </div>
+                <div>
+                    <input type="radio" name="answer" id="c" class="answer">
+                    <label for="c" id="c_text">Answer</label>
+                </div>
+                <div>
+                    <input type="radio" name="answer" id="d" class="answer">
+                    <label for="d" id="d_text">Answer</label>
+                </div>
+
+
+            </div>
+            <div class="flex justify-between w-2/5">
+                <button type="button" id="previous" class="border-2 px-2 rounded bg-blue-300 text-white">Previous</button>
+                <button type="button" id="next" class="border-2 px-2 rounded  bg-blue-300 text-white">Next</button>
+                <button type="button" id="submit" class="border-2 px-2 rounded hidden  bg-green-300 text-white">Submit</button>
+            </div>
+        </form>
+    </main>
+
+    <script>
+
+        function quiz() {
+            const questions = [
+                {
+                    question: "1- select your country",
+                    a: "canada",
+                    b: "india",
+                    c: "america",
+                    d: "italy",
+                    correct: "b"
+                },
+                {
+                    question: "2- select your state",
+                    a: "punjab",    
+                    b: "delhi",
+                    c: "bihar",
+                    d: "himachal",
+                    correct: "a"
+                },
+                {
+                    question: "3- full form of CSS",
+                    a: "central style sheets",
+                    b: "cascading style sheet",
+                    c: "cascading simple sheets",
+                    d: "cars SUVs sailboats",
+                    correct: "b"
+                },
+                {
+                    question: "4- full form of HTML",
+                    a: "hypertext markup language",
+                    b: "hypertext markdown language",
+                    c: "hypertext machine language",
+                    d: "helicopter terminal motorboats",
+                    correct: "a"
+                },
+                {
+                    question: "5- full form of HTML",
+                    a: "hypertext markup language",
+                    b: "hypertext markdown language",
+                    c: "hypertext machine language",
+                    d: "helicopter terminal motorboats",
+                    correct: "a"
+                },
+                {
+                    question: "6- full form of CSS",
+                    a: "central style sheets",
+                    b: "cascading style sheet",
+                    c: "cascading simple sheets",
+                    d: "cars SUVs sailboats",
+                    correct: "b"
+                },
+                {
+                    question: "7- select your state",
+                    a: "punjab",
+                    b: "delhi",
+                    c: "bihar",
+                    d: "himachal",
+                    correct: "a"
+                },
+                {
+                    question: "8-select your country",
+                    a: "canada",
+                    b: "india",
+                    c: "america",
+                    d: "italy",
+                    correct: "b"
+                }
+
+
+            ];
+
+            let quiz = document.querySelector("#quizContainer");
+            let answerEls = document.querySelectorAll(".answer");
+            let questionEl = document.querySelector("#question");
+            let a_text = document.querySelector("#a_text");
+            let b_text = document.querySelector("#b_text");
+            let c_text = document.querySelector("#c_text");
+            let d_text = document.querySelector("#d_text");
+            let nextBtn = document.querySelector("#next");
+            let previousBtn = document.querySelector("#previous");
+
+            let currentQuiz = 0;
+            let score = 0;
+
+
+            function deselectAnswer() {
+                answerEls.forEach(answerEls => answerEls.checked = false);
+            }
+
+            function getselected() {
+                let answer;
+                answerEls.forEach(answerEl => {
+                    if (answerEl.checked) {
+                        answer = answerEl.id;
+                    }
+                })
+                return answer;
+            }
+
+            function updateQuestionContent() {
+                currentQuestion = questions[currentQuiz];
+                questionEl.innerHTML = currentQuestion.question;
+                a_text.innerHTML = currentQuestion.a;
+                b_text.innerHTML = currentQuestion.b;
+                c_text.innerHTML = currentQuestion.c;
+                d_text.innerHTML = currentQuestion.d;
+
+                deselectAnswer();
+            }
+
+
+            let submitBtn = document.querySelector("#submit");
+
+            previousBtn.addEventListener("click", () => {
+                currentQuiz--;
+
+                if (currentQuiz >= 0) {
+                    // Update the content with the previous question
+                    updateQuestionContent();
+
+                } else {
+                    currentQuiz = 0;
+                }
+
+                nextBtn.style.display = "block";
+                submitBtn.style.display = "none";
+            });
+
+            nextBtn.addEventListener("click", () => {
+                const answer = getselected();
+                if (answer) {
+                    if (answer === questions[currentQuiz].correct) {
+                        score++;
+                    }
+                    currentQuiz++;
+
+                    if (currentQuiz < questions.length) {
+                        // Update the content with the next question
+                        updateQuestionContent();
+
+                    } else {
+                        nextBtn.style.display = "none";
+                        submitBtn.style.display = "block";
+                    }
+                }
+            });
+
+            submitBtn.addEventListener("click", () => {
+               
+                if(score > 4 ){
+                    quiz.innerHTML = `<h2 class="font-bold">Your final score is ${score}/${questions.length}</h2>
+                                       <p class="text-green-400">you are pass</p>`;
+
+                } else {
+                    quiz.innerHTML = `<h2 class="font-bold">Your final score is ${score}/${questions.length}</h2>
+                                       <p class="text-red-400">you are fail</p>`;
+                }
+            });
+
+
+            updateQuestionContent();
+        }
+
+
+        quiz();
+    </script>
+</body>
+
+</html>
