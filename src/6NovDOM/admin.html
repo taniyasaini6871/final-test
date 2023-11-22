@@ -9,7 +9,8 @@
 </head>
 
 <body class="bg-gray-100">
-    <main class="container mx-auto my-8">
+    <main class="container mx-auto">
+        <h1 class="py-2 font-semibold text-center text-2xl">User Information</h1>
         <form action="#" class="bg-white p-6 rounded-md shadow-md" id="adminForm">
             <div class="grid grid-cols-2 gap-1">
                 <div>
@@ -61,10 +62,14 @@
                     <span id="bloodGroupError" class="text-red-500"></span>
                 </div>
 
-                <div>
+                <div class="relative">
+                    <div>
+                        <img src="https://media.istockphoto.com/id/1337144146/vector/default-avatar-profile-icon-vector.jpg?s=612x612&w=0&k=20&c=BIbFwuv7FxTWvh5S3vB6bkT0Qv8Vn8N5Ffseq84ClGI="
+                            alt="userimg" id="userimage" class="h-16 w-16 absolute right-0 -bottom-2">
+                    </div>
                     <label for="image" class="block text-sm font-medium text-gray-600">Image:</label>
                     <input type="file" id="image" name="image" accept="image/*"
-                        class="mt-1 p-2 block w-full border rounded-md">
+                        class="mt-1 p-2 block w-3/4  border rounded-md">
                     <span id="imageError" class="text-red-500"></span>
                 </div>
 
@@ -135,10 +140,11 @@
             form: document.getElementById('adminForm'),
             copyAddressCheckbox: document.getElementById('copyAddress'),
             formDataArray: JSON.parse(localStorage.getItem('adminFormData')) || [],
+
             updateLocalStorage: function () {
                 localStorage.setItem('adminFormData', JSON.stringify(this.formDataArray));
             },
-            
+
             submitForm: async function () {
 
                 if (fname.value.trim() === '') {
@@ -204,9 +210,17 @@
                             formDataObject[key] = value;
                         }
                     }
+                    const existingDataIndex = this.formDataArray.findIndex(item => (item.id) == (new URLSearchParams(location.search).get('id')));
 
-                    // Push the new form data object into the array
-                    this.formDataArray.push(formDataObject);
+                    if (existingDataIndex !== -1) {
+                        // Update existing data
+                        this.formDataArray[existingDataIndex] = formDataObject;
+
+
+                    } else {
+                        // Add new form data object into the array
+                        this.formDataArray.push(formDataObject);
+                    }
 
                     // Store the array in local storage
                     this.updateLocalStorage()
@@ -245,8 +259,9 @@
             populateFormData: function () {
                 const storedDataJSON = localStorage.getItem('adminFormData');
                 const storedData = JSON.parse(storedDataJSON) ? JSON.parse(storedDataJSON) : [];
+                const imageElement = document.getElementById('userimage');
 
-                storedData.forEach(element => {
+                storedData.forEach((element,itemIndex) => {
                     if (element.id == new URLSearchParams(location.search).get('id')) {
                         this.fname.value = element.fname;
                         this.lname.value = element.lname;
@@ -259,6 +274,7 @@
                         this.role.value = element.role;
                         this.currentAddress.value = element.currentAddress;
                         this.permanentAddress.value = element.permanentAddress;
+                        imageElement.src = element.image || 'https://media.istockphoto.com/id/1337144146/vector/default-avatar-profile-icon-vector.jpg?s=612x612&w=0&k=20&c=BIbFwuv7FxTWvh5S3vB6bkT0Qv8Vn8N5Ffseq84ClGI=';
                     }
                 });
             },
