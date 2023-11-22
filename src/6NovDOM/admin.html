@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin form</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
+</head>
+
+<body class="bg-gray-100">
+    <main class="container mx-auto my-8">
+        <form action="#" class="bg-white p-6 rounded-md shadow-md" id="adminForm">
+            <div class="grid grid-cols-2 gap-1">
+                <div>
+                    <label for="fname" class="block text-sm font-medium text-gray-600">First Name:</label>
+                    <input type="text" name="fname" id="fname" maxlength="15"
+                        class="mt-1 p-2 block w-full border rounded-md">
+                    <span id="fnameError" class="text-red-500"></span>
+                </div>
+                <div>
+                    <label for="lname" class="block text-sm font-medium text-gray-600">Last Name:</label>
+                    <input type="text" name="lname" id="lname" maxlength="15"
+                        class="mt-1 p-2 block w-full border rounded-md">
+                    <span id="lnameError" class="text-red-500"></span>
+                </div>
+                <div>
+                    <label for="age" class="block text-sm font-medium text-gray-600">Age:</label>
+                    <input type="number" id="age" name="age" required class="mt-1 p-2 block w-full border rounded-md">
+                    <span id="ageError" class="text-red-500"></span>
+                </div>
+
+                <div>
+                    <label for="gender" class="block text-sm font-medium text-gray-600">Gender:</label>
+                    <select id="gender" name="gender" required class="mt-1 p-2 block w-full border rounded-md">
+                        <option value="" disabled selected>Select gender</option>
+                        <option value="male">Male</option>
+                        <option value="female">Female</option>
+                        <option value="other">Other</option>
+                    </select>
+                    <span id="genderError" class="text-red-500"></span>
+                </div>
+
+                <div>
+                    <label for="email" class="block text-sm font-medium text-gray-600">Email:</label>
+                    <input type="email" id="email" name="email" required
+                        class="mt-1 p-2 block w-full border rounded-md">
+                    <span id="emailError" class="text-red-500"></span>
+                </div>
+
+                <div>
+                    <label for="dob" class="block text-sm font-medium text-gray-600">Date of Birth:</label>
+                    <input type="date" id="dob" name="dob" required class="mt-1 p-2 block w-full border rounded-md">
+                    <span id="dobError" class="text-red-500"></span>
+                </div>
+
+                <div>
+                    <label for="bloodGroup" class="block text-sm font-medium text-gray-600">Blood Group:</label>
+                    <input type="text" id="bloodGroup" name="bloodGroup" required
+                        class="mt-1 p-2 block w-full border rounded-md">
+                    <span id="bloodGroupError" class="text-red-500"></span>
+                </div>
+
+                <div>
+                    <label for="image" class="block text-sm font-medium text-gray-600">Image:</label>
+                    <input type="file" id="image" name="image" accept="image/*"
+                        class="mt-1 p-2 block w-full border rounded-md">
+                    <span id="imageError" class="text-red-500"></span>
+                </div>
+
+                <div>
+                    <label for="phoneNumber" class="block text-sm font-medium text-gray-600">Phone Number:</label>
+                    <input type="tel" id="phoneNumber" name="phoneNumber" required
+                        class="mt-1 p-2 block w-full border rounded-md">
+                    <span id="phoneNumberError" class="text-red-500"></span>
+                </div>
+
+                <div>
+                    <label for="role" class="block text-sm font-medium text-gray-600">Roles:</label>
+                    <select id="role" name="role" required class="mt-1 p-2 block w-full border rounded-md">
+                        <option value="" disabled selected>Select role</option>
+                        <option value="employee">Employee</option>
+                        <option value="hr">HR</option>
+                        <option value="tl">Team Leader</option>
+                    </select>
+                    <span id="roleError" class="text-red-500"></span>
+                </div>
+
+                <div>
+                    <label for="currentAddress" class="block text-sm font-medium text-gray-600">Current Address:</label>
+                    <textarea id="currentAddress" name="currentAddress" required
+                        class="mt-1 p-2 block w-full border rounded-md"></textarea>
+                    <span id="currentAddressError" class="text-red-500"></span>
+                    <div>
+                        <input type="checkbox" id="copyAddress">
+                        <label for="copyAddress" class="text-sm font-medium text-gray-600">Current Address same as
+                            Permanent
+                            Address</label>
+                    </div>
+                </div>
+
+                <div>
+                    <label for="permanentAddress" class="block text-sm font-medium text-gray-600">Permanent
+                        Address:</label>
+                    <textarea id="permanentAddress" name="permanentAddress" required
+                        class="mt-1 p-2 block w-full border rounded-md"></textarea>
+                    <span id="permanentAddressError" class="text-red-500"></span>
+                </div>
+            </div>
+
+            <div class="text-center mt-4">
+                <button type="button" id="btn"
+                    class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-md">Submit</button>
+            </div>
+
+        </form>
+    </main>
+    <script>
+
+        let obj = {
+
+            submit: document.querySelector("#btn"),
+            fname: document.getElementById('fname'),
+            lname: document.getElementById('lname'),
+            age: document.getElementById('age'),
+            gender: document.getElementById('gender'),
+            email: document.getElementById('email'),
+            dob: document.getElementById('dob'),
+            bloodGroup: document.getElementById('bloodGroup'),
+            image: document.getElementById('image'),
+            phoneNumber: document.getElementById('phoneNumber'),
+            role: document.getElementById('role'),
+            currentAddress: document.getElementById('currentAddress'),
+            permanentAddress: document.getElementById('permanentAddress'),
+            form: document.getElementById('adminForm'),
+            copyAddressCheckbox: document.getElementById('copyAddress'),
+            formDataArray: JSON.parse(localStorage.getItem('adminFormData')) || [],
+            updateLocalStorage: function () {
+                localStorage.setItem('adminFormData', JSON.stringify(this.formDataArray));
+            },
+            
+            submitForm: async function () {
+
+                if (fname.value.trim() === '') {
+                    fnameError.innerHTML = 'First Name is required';
+                }
+                if (lname.value.trim() === '') {
+                    lnameError.innerHTML = 'Last Name is required';
+                }
+                if (age.value === '') {
+                    ageError.innerHTML = 'Age is required';
+                }
+                if (gender.value === '') {
+                    genderError.innerHTML = 'Select gender';
+                }
+                if (email.value === '') {
+                    emailError.innerHTML = 'Please Enter email';
+                }
+                if (dob.value === '') {
+                    dobError.innerHTML = 'Please select DOB'
+                }
+                if (role.value === '') {
+                    roleError.innerHTML = 'Please select Role'
+                }
+                if (bloodGroup.value === "") {
+                    bloodGroupError.innerHTML = "Please enter blood group";
+                }
+                let imageFile = this.image.files[0];
+                if (!imageFile) {
+                    imageError.innerHTML = 'Please select an image file.';
+                }
+                if (phoneNumber.value === "") {
+                    phoneNumberError.innerHTML = "Enter Phone number";
+                }
+                if (currentAddress.value === "") {
+                    currentAddressError.innerHTML = "Fill address";
+                }
+                if (permanentAddress.value === "") {
+                    permanentAddressError.innerHTML = "Fill address";
+                }
+
+                if (!fnameError.innerHTML && !lnameError.innerHTML && !ageError.innerHTML &&
+                    !genderError.innerHTML && !emailError.innerHTML && !dobError.innerHTML &&
+                    !bloodGroupError.innerHTML && !imageError.innerHTML && !phoneNumberError.innerHTML &&
+                    !currentAddressError.innerHTML && !permanentAddressError.innerHTML && !roleError.innerHTML) {
+
+                    const formData = new FormData(this.form);
+
+                    let formDataObject = { id: Date.now() };
+
+                    for (const [key, value] of formData.entries()) {
+                        if (value instanceof File) {
+                            if (value.size > 0) {
+                                try {
+                                    const result = await this.readFile(value);
+                                    formDataObject[key] = result;
+                                } catch (error) {
+                                    console.error("Error reading file:", error);
+                                }
+                            } else {
+                                formDataObject[key] = null;
+                            }
+                        } else {
+                            formDataObject[key] = value;
+                        }
+                    }
+
+                    // Push the new form data object into the array
+                    this.formDataArray.push(formDataObject);
+
+                    // Store the array in local storage
+                    this.updateLocalStorage()
+                    alert('Form data successfully stored in local storage!');
+                    window.location.href = 'http://127.0.0.1:5500/src/6NovDOM/tableForm.html';
+
+                    this.form.reset();
+                }
+            },
+            readFile: function (file) {
+                return new Promise((resolve, reject) => {
+                    const reader = new FileReader();
+
+                    reader.onload = function () {
+                        resolve(reader.result);
+                    };
+
+                    reader.onerror = function (error) {
+                        reject(error);
+                    };
+
+                    reader.readAsDataURL(file);
+                });
+            },
+
+            handleCheckboxState: function () {
+                let permanentAddress = this.permanentAddress;
+
+                this.copyAddressCheckbox.addEventListener('change', function () {
+                    if (obj.copyAddressCheckbox.checked) {
+                        permanentAddress.innerHTML = currentAddress.value;
+                    }
+                });
+            },
+
+            populateFormData: function () {
+                const storedDataJSON = localStorage.getItem('adminFormData');
+                const storedData = JSON.parse(storedDataJSON) ? JSON.parse(storedDataJSON) : [];
+
+                storedData.forEach(element => {
+                    if (element.id == new URLSearchParams(location.search).get('id')) {
+                        this.fname.value = element.fname;
+                        this.lname.value = element.lname;
+                        this.age.value = element.age;
+                        this.gender.value = element.gender;
+                        this.email.value = element.email;
+                        this.dob.value = element.dob;
+                        this.bloodGroup.value = element.bloodGroup;
+                        this.phoneNumber.value = element.phoneNumber;
+                        this.role.value = element.role;
+                        this.currentAddress.value = element.currentAddress;
+                        this.permanentAddress.value = element.permanentAddress;
+                    }
+                });
+            },
+
+            validations: function () {
+
+                const fnameError = document.getElementById('fnameError');
+                const lnameError = document.getElementById('lnameError');
+                const ageError = document.getElementById('ageError');
+                const genderError = document.getElementById('genderError');
+                const emailError = document.getElementById('emailError');
+                const dobError = document.getElementById('dobError');
+                const bloodGroupError = document.getElementById('bloodGroupError');
+                const imageError = document.getElementById('imageError');
+                const phoneNumberError = document.getElementById('phoneNumberError');
+                const roleError = document.getElementById('roleError');
+                const currentAddressError = document.getElementById('currentAddressError');
+                const permanentAddressError = document.getElementById('permanentAddressError');
+
+                this.fname.addEventListener("input", () => {
+
+                    if (!/^[a-zA-Z]+$/.test(this.fname.value)) {
+                        fnameError.innerHTML = 'First Name should contain only alphabets.';
+                    }
+                    if (this.fname.value === "" || /^[a-zA-Z]+$/.test(this.fname.value)) {
+                        fnameError.innerHTML = '';
+                    }
+                })
+
+                this.lname.addEventListener("input", () => {
+
+                    if (!/^[a-zA-Z]+$/.test(this.lname.value)) {
+                        lnameError.innerHTML = 'Last Name should contain only alphabets.';
+                    }
+
+                    if (this.lname.value === "" || /^[a-zA-Z]+$/.test(this.lname.value)) {
+                        lnameError.innerHTML = '';
+                    }
+                })
+
+                this.age.addEventListener("input", () => {
+                    let ageValue = this.age.value;
+
+                    if (ageValue < 18) {
+                        ageError.innerHTML = 'Age must be a number greater than 18.';
+                    }
+                    if (ageValue === "" || ageValue > 18) {
+                        ageError.innerHTML = '';
+                    }
+                });
+
+                this.gender.addEventListener("input", () => {
+                    if (gender.value !== '') {
+                        genderError.innerHTML = '';
+                    }
+                })
+
+                this.email.addEventListener("input", () => {
+                    let emailValue = this.email.value;
+
+                    const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+
+                    if (!emailRegex.test(emailValue)) {
+                        emailError.innerHTML = 'Please enter a valid email address.';
+                    }
+                    if (emailValue === "" || emailRegex.test(emailValue)) {
+                        emailError.innerHTML = '';
+                    }
+                });
+
+                this.dob.addEventListener("input", () => {
+
+                    if (this.dob.value !== "") {
+                        dobError.innerHTML = "";
+                    }
+
+                });
+
+                this.role.addEventListener("input", () => {
+
+                    if (this.role.value !== "") {
+                        roleError.innerHTML = "";
+                    }
+
+                });
+
+                this.bloodGroup.addEventListener("input", () => {
+                    let bloodGroupValue = this.bloodGroup.value;
+
+                    const validBloodGroups = ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'];
+
+                    if (!validBloodGroups.includes(bloodGroupValue.toUpperCase())) {
+                        bloodGroupError.innerHTML = 'Please enter a valid blood group (e.g., A+, B-, O-).';
+                    }
+                    if (bloodGroupValue === "" || validBloodGroups.includes(bloodGroupValue.toUpperCase())) {
+                        bloodGroupError.innerHTML = '';
+                    }
+                });
+
+                this.image.addEventListener("change", (e) => {
+                    let imageFile = this.image.files;
+
+
+                    if (imageFile) {
+                        imageError.innerHTML = '';
+                    }
+                });
+
+                this.phoneNumber.addEventListener("input", () => {
+                    let phoneNumberValue = this.phoneNumber.value;
+
+                    // Regular expression for a valid Indian phone number
+                    const phoneRegex = /^[6-9]\d{9}$/;
+
+                    if (!phoneRegex.test(phoneNumberValue)) {
+                        phoneNumberError.innerHTML = 'Please enter a valid Indian phone number.';
+                    }
+                    if (phoneNumberValue === "" || phoneRegex.test(phoneNumberValue)) {
+                        phoneNumberError.innerHTML = '';
+                    }
+                });
+
+                this.currentAddress.addEventListener("input", () => {
+                    if (currentAddress.value !== "") {
+                        currentAddressError.innerHTML = "";
+                    }
+                });
+
+                this.permanentAddress.addEventListener("input", () => {
+                    if (permanentAddress.value !== "") {
+                        permanentAddressError.innerHTML = "";
+                    }
+                });
+
+                this.handleCheckboxState();
+                this.populateFormData();
+
+            }
+        }
+
+        obj.validations();
+
+        document.querySelector("#btn").addEventListener("click", function () {
+            obj.submitForm();
+        });
+
+        obj.form.addEventListener('submit', (e) => {
+            e.preventDefault();
+        });
+
+
+    </script>
+</body>
+
+</html>

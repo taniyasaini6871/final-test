@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>search</title>
+      <link rel="stylesheet" href="/dist/output.css">
+</head>
+
+<body>
+      <main>
+            <nav class="bg-blue-200 p-4">
+                  <input type="text" name="search" id="search" placeholder="search here"
+                        class="outline-none m-2 w-96 h-10 rounded-2xl px-2 shadow-2xl">
+            </nav>
+            <div>
+                  <table>
+                        <thead>
+                              <tr>
+                                    <th class="border-separate p-2 border-2 border-black">UserId</th>
+                                    <th class="border-separate p-2 border-2 border-black">Id</th>
+                                    <th class="border-separate p-2 border-2 border-black">Title</th>
+                                    <th class="border-separate p-2 border-2 border-black">Body</th>
+                              </tr>
+                        </thead>
+                        <tbody id="tbody">
+
+                        </tbody>
+                  </table>
+            </div>
+      </main>
+      <script>
+      
+      const obj = {
+                  response: fetch('https://jsonplaceholder.typicode.com/posts')
+                        .then(response => response.json()),
+
+                  render: function () {
+
+                        let tbody = document.querySelector("#tbody");
+                        this.response.then(users => {
+                              users.forEach(item => {
+                                    let row = tbody.insertRow();
+                                    row.insertCell(0).innerHTML = item.userId;
+                                    row.insertCell(1).innerHTML = item.id;
+                                    row.insertCell(2).innerHTML = item.title;
+                                    row.insertCell(3).innerHTML = item.body;
+
+                              })
+                        })
+
+                  },
+                  search: function () {
+                        let input = document.getElementById("search").value.toLowerCase().trim();
+
+                        this.response.then(posts => {
+                              let filteredPosts = posts.filter((post) => post.title.toLowerCase().includes(input));
+                              let tbody = document.getElementById("tbody");
+                              tbody.innerHTML = "";
+
+                              filteredPosts.forEach(item => {
+                                    let row = tbody.insertRow();
+                                    row.insertCell(0).innerHTML = item.userId;
+                                    row.insertCell(1).innerHTML = item.id;
+                                    row.insertCell(2).innerHTML = item.title;
+                                    row.insertCell(3).innerHTML = item.body;
+                              });
+                        });
+                  }
+            }
+            obj.render();
+            document.getElementById("search").addEventListener("input", function () {
+                  obj.search();
+            });
+
+      </script>
+</body>
+
+</html>

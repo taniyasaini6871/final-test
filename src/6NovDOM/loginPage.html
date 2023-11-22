@@ -15,27 +15,27 @@
             <form action="#" id="form" class="grid grid-cols-2 gap-4 ">
                 <div class="space-y-1">
                     <label for="name">Enter name</label>
-                    <input type="text" id="name" placeholder="Username" class="border outline-none p-1 rounded"
+                    <input type="text" id="name" placeholder="Username" name="username" class="border outline-none p-1 rounded"
                         required>
                     <p id="invalid-name"></p>
                 </div>
                 <div class="space-y-1">
                     <label for="email">Enter email</label>
-                    <input type="email" id="email" placeholder="Email" class="border outline-none p-1 rounded" required>
+                    <input type="email" id="email" name="email" placeholder="Email" class="border outline-none p-1 rounded" required>
                     <p id="invalid-email"></p>
 
                 </div>
                 <div class="space-y-1">
                     <label for="password">Enter password</label>
 
-                    <input type="password" id="password" placeholder="Password" class="border outline-none p-1 rounded"
+                    <input type="password" id="password" name="password" placeholder="Password" class="border outline-none p-1 rounded"
                         required>
                     <p id="invalid-password"></p>
 
                 </div>
                 <div class="space-y-1">
                     <label for="password2">Confirm password</label>
-                    <input type="password" id="password2" placeholder="Confirm Password"
+                    <input type="password" id="password2" name="password2" placeholder="Confirm Password"
                         class="border outline-none p-1 rounded" required>
                     <p id="invalid-confirmPassword"></p>
 
@@ -44,7 +44,7 @@
                     <label for="gender">Select gender</label>
                     <select name="gender" id="gender" class="w-full outline-none border text-gray-500 p-1 rounded"
                         required>
-                        <option value="">Choose gender</option>
+                        <option value="choose">Choose gender</option>
                         <option value="male">Male</option>
                         <option value="female">female</option>
                         <option value="others">Others</option>
@@ -53,173 +53,184 @@
                 </div>
                 <div>
                     <fieldset class=" text-gray-600 space-y-1">
-                        
-                            <legend class="text-black">Are you 18+ ?</legend>
-                        
+
+                        <legend class="text-black">Are you 18+ ?</legend>
                         <div>
                             <label for="adult">yes</label>
                             <input type="radio" id="adult" name="adult" value="yes">
-
-
                             <label for="not-adult">No</label>
                             <input type="radio" id="not-adult" name="adult" value="no">
                         </div>
                     </fieldset>
                     <p id="invalid-age"></p>
                 </div>
-                
-                    <button type="submit" id="signupBtn"
-                        class="border-2 bg-blue-400 text-sm px-2 py-1 rounded col-span-2 text-white font-semibold">Sign
-                        Up</button>
-                
+                <button type="submit" id="signupBtn"
+                    class="border-2 bg-blue-400 text-sm px-2 py-1 rounded col-span-2 text-white font-semibold">Sign
+                    Up</button>
             </form>
         </div>
     </main>
 
     <script>
+
         const loginPage = {
 
             form: document.querySelector("#form"),
-            name: document.querySelector("#name"),
-            email: document.querySelector("#email"),
-            password: document.querySelector("#password"),
-            password2: document.querySelector("#password2"),
-            signupBtn: document.querySelector("#signupBtn"),
-            selectGender: document.querySelector("#gender"),
 
-            correctInputs: function () {
+            render: () => {
 
-                let nameValidate = document.querySelector("#invalid-name");
-                nameValidate.setAttribute("class", "text-sm text-red-500");
+            }
 
-                let emailValidate = document.querySelector("#invalid-email");
-                emailValidate.setAttribute("class", "text-sm text-red-500");
+        }
 
-                let passwordValidate = document.querySelector("#invalid-password");
-                passwordValidate.setAttribute("class", "text-sm text-red-500");
+        loginPage.form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const formData = new FormData(form);
+            for(item of FormData){
+                console.log(item[0] , item[1]); 
+            }
+        })
 
-                let confirmPassword = document.querySelector("#invalid-confirmPassword");
-                confirmPassword.setAttribute("class", "text-sm text-red-500");
+        // const loginPage = {
 
-                let genderSelection = document.querySelector("#invalid-selection");
-                genderSelection.setAttribute("class", "text-sm text-red-500")
+        //     form: document.querySelector("#form"),
+        //     name: document.querySelector("#name"),
+        //     email: document.querySelector("#email"),
+        //     password: document.querySelector("#password"),
+        //     password2: document.querySelector("#password2"),
+        //     signupBtn: document.querySelector("#signupBtn"),
+        //     selectGender: document.querySelector("#gender"),
 
-                let ageValidation = document.querySelector("#invalid-age");
-                ageValidation.setAttribute("class", "text-sm text-red-500");
+        //     correctInputs: function () {
 
-                // Clear error messages when inputs are not empty
-                this.name.addEventListener("input", () => {
-                    let nameValue = this.name.value.trim();
-                    if (nameValue !== "") {
-                        nameValidate.innerHTML = "";
-                    }
-                });
+        //         let nameValidate = document.querySelector("#invalid-name");
+        //         nameValidate.setAttribute("class", "text-sm text-red-500");
 
-                this.email.addEventListener("input", () => {
-                    let emailValue = this.email.value.trim();
-                    if (emailValue !== "") {
-                        emailValidate.innerHTML = "";
-                    }
-                });
+        //         let emailValidate = document.querySelector("#invalid-email");
+        //         emailValidate.setAttribute("class", "text-sm text-red-500");
 
-                this.password.addEventListener("input", () => {
-                    let passwordValue = this.password.value.trim();
-                    if (passwordValue !== "") {
-                        passwordValidate.innerHTML = "";
-                    }
+        //         let passwordValidate = document.querySelector("#invalid-password");
+        //         passwordValidate.setAttribute("class", "text-sm text-red-500");
 
-                });
+        //         let confirmPassword = document.querySelector("#invalid-confirmPassword");
+        //         confirmPassword.setAttribute("class", "text-sm text-red-500");
 
-                this.password2.addEventListener("input", () => {
-                    if (this.password2.value.trim() !== "") {
-                        confirmPassword.innerHTML = "";
-                    }
-                })
+        //         let genderSelection = document.querySelector("#invalid-selection");
+        //         genderSelection.setAttribute("class", "text-sm text-red-500")
 
-                this.selectGender.addEventListener("change", () => {
-                    let genderValue = this.selectGender.value;
-                    if (genderValue !== "choose") {
-                        genderSelection.innerHTML = "";
-                    }
-                });
+        //         let ageValidation = document.querySelector("#invalid-age");
+        //         ageValidation.setAttribute("class", "text-sm text-red-500");
 
-                document.querySelectorAll('input[name="adult"]').forEach((radio) => {
-                    radio.addEventListener('change', () => {
-                        if (document.querySelector('input[name="adult"]:checked')) {
-                            ageValidation.innerHTML = "";
-                        }
-                    });
-                });
+        //         // Clear error messages when inputs are not empty
+        //         this.name.addEventListener("input", () => {
+        //             let nameValue = this.name.value.trim();
+        //             if (nameValue !== "") {
+        //                 nameValidate.innerHTML = "";
+        //             }
+        //         });
 
-                this.signupBtn.addEventListener("click", () => {
+        //         this.email.addEventListener("input", () => {
+        //             let emailValue = this.email.value.trim();
+        //             if (emailValue !== "") {
+        //                 emailValidate.innerHTML = "";
+        //             }
+        //         });
 
-                    let nameValue = this.name.value.trim();
-                    let emailValue = this.email.value.trim();
-                    let passwordValue = this.password.value.trim();
-                    let confirm_passwordValue = this.password2.value.trim();
-                    let genderValue = this.selectGender.value;
+        //         this.password.addEventListener("input", () => {
+        //             let passwordValue = this.password.value.trim();
+        //             if (passwordValue !== "") {
+        //                 passwordValidate.innerHTML = "";
+        //             }
 
-                    // Check for empty name
-                    if (nameValue === "") {
-                        nameValidate.innerHTML = "";
-                    }
-                    else if (!/^[a-zA-Z\s]+$/.test(nameValue) || (nameValue.length < 3)) {
-                        nameValidate.innerHTML = "*Please enter valid the username";
-                    }
+        //         });
 
-                    // Check for empty or invalid email
-                    if (emailValue === "") {
-                        emailValidate.innerHTML = "";
-                    } else if (!/^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[a-zA-Z]+$/.test(emailValue)) {
-                        emailValidate.innerHTML = "*Please enter a valid email";
+        //         this.password2.addEventListener("input", () => {
+        //             if (this.password2.value.trim() !== "") {
+        //                 confirmPassword.innerHTML = "";
+        //             }
+        //         })
 
-                    }
+        //         this.selectGender.addEventListener("change", () => {
+        //             let genderValue = this.selectGender.value;
+        //             if (genderValue !== "choose") {
+        //                 genderSelection.innerHTML = "";
+        //             }
+        //         });
 
-                    if (passwordValue === "") {
-                        passwordValidate.innerHTML = "";
-                    }
-                    else if (!/^(?=.?[A-Z])(?=.?[a-z])(?=.?[0-9])(?=.?[#?!@$%^&*-]).{8,16}$/.test(passwordValue)) {
-                        passwordValidate.innerHTML = "password must be Min.8.char, 1.uppercase.letter, 1.lowercase.letter, 1.num and 1.special.char";
-                    }
+        //         document.querySelectorAll('input[name="adult"]').forEach((radio) => {
+        //             radio.addEventListener('change', () => {
+        //                 if (document.querySelector('input[name="adult"]:checked')) {
+        //                     ageValidation.innerHTML = "";
+        //                 }
+        //             });
+        //         });
 
-                    if (confirm_passwordValue === "") {
-                        confirmPassword.innerHTML = "";
-                    }
-                    else if (confirm_passwordValue !== passwordValue) {
-                        confirmPassword.innerHTML = "your password does not matched";
-                    }
+        //         this.signupBtn.addEventListener("click", () => {
 
+        //             let nameValue = this.name.value.trim();
+        //             let emailValue = this.email.value.trim();
+        //             let passwordValue = this.password.value.trim();
+        //             let confirm_passwordValue = this.password2.value.trim();
+        //             let genderValue = this.selectGender.value;
 
-                    if (genderValue === "") {
-                        genderSelection.innerHTML = "*Please select a gender";
-                    }
+        //             // Check for empty name
 
-                    if (!document.querySelector('input[name="adult"]:checked')) {
-                        ageValidation.innerHTML = "*Please select whether you are 18+";
-                    }
+        //             if (!/^[a-zA-Z\s]+$/.test(nameValue) || (nameValue.length < 3 || nameValue === "")) {
+        //                 nameValidate.innerHTML = "*Please enter valid the username";
+        //             }
+
+        //             // Check for empty or invalid email
+
+        //             if (!/^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[a-zA-Z]+$/.test(emailValue) || emailValue === "") {
+        //                 emailValidate.innerHTML = "*Please enter a valid email";
+
+        //             }
 
 
-                    if (nameValue !== "" && emailValue !== "" && passwordValue !== "" && this.password2.value.trim() !== "" && passwordValue === confirm_passwordValue) {
-                        alert("successfully signed up");
+        //             if (!/^(?=.?[A-Z])(?=.?[a-z])(?=.?[0-9])(?=.?[#?!@$%^&*-]).{8,16}$/.test(passwordValue) || passwordValue === "") {
+        //                 passwordValidate.innerHTML = "password must be Min.8.char, 1.uppercase.letter, 1.lowercase.letter, 1.num and 1.special.char";
+        //             }
 
-                        this.name.value = "";
-                        this.email.value = "";
-                        this.password.value = "";
-                        this.password2.value = "";
-                        this.selectGender.value = "choose";
-                    }
 
-                });
 
-                this.form.addEventListener('submit', (e) => {
-                    e.preventDefault();
+        //             if (confirm_passwordValue !== passwordValue || confirm_passwordValue === "") {
+        //                 confirmPassword.innerHTML = "your password does not matched";
+        //             }
 
-                });
 
-            },
-        };
+        //             if (genderValue === "") {
+        //                 genderSelection.innerHTML = "*Please select a gender";
+        //             }
 
-        loginPage.correctInputs();
+        //             if (!document.querySelector('input[name="adult"]:checked')) {
+        //                 ageValidation.innerHTML = "*Please select whether you are 18+";
+        //             }
+
+
+        //             if (nameValue !== "" && emailValue !== "" && passwordValue !== "" && this.password2.value.trim() !== "" && passwordValue === confirm_passwordValue) {
+        //                 alert("successfully signed up");
+
+        //                 this.name.value = "";
+        //                 this.email.value = "";
+        //                 this.password.value = "";
+        //                 this.password2.value = "";
+        //                 this.selectGender.value = "choose";
+        //             }
+
+        //         });
+
+
+        //     },
+
+
+        // };
+        // loginPage.correctInputs();
+
+        // loginPage.form.addEventListener('submit', (e) => {
+        //     e.preventDefault();
+
+
+        // });
 
 
     </script>

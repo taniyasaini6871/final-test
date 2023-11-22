@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Users Table</title>
+    <link rel="stylesheet" href="/dist/output.css">
+</head>
+
+<body class="bg-gray-100 font-sans">
+    <main class="mx-auto p-4">
+        <nav class="bg-blue-200 p-4 mb-4 rounded-md flex justify-between">
+            <input type="text" name="search" id="search" placeholder="search here"
+                class="outline-none w-96 h-10 rounded-full px-4 shadow-md focus:ring focus:ring-blue-300">
+            <button id="add-btn" type="button" class="px-2 text-white font-bold bg-blue-300 py-1 rounded">Add
+                User</button>
+        </nav>
+        <div class="bg-white rounded-md shadow-md">
+            <table class="w-full">
+                <thead>
+                    <tr>
+                        <th class="p-2 border-2 border-black">Image</th>
+                        <th class="p-2 border-2 border-black">fname</th>
+                        <th class="p-2 border-2 border-black">lname</th>
+                        <th class="p-2 border-2 border-black">dob</th>
+                        <th class="p-2 border-2 border-black">email</th>
+                        <th class="p-2 border-2 border-black">bloodGroup</th>
+                        <th class="p-2 border-2 border-black">gender</th>
+                        <th class="p-2 border-2 border-black">currentAddress</th>
+                        <th class="p-2 border-2 border-black">phoneNumber</th>
+                        <th class="p-2 border-2 border-black">role</th>
+                        <th class="p-2 border-2 border-black">age</th>
+                        <th class="p-2 border-2 border-black">Action</th>
+                    </tr>
+                </thead>
+                <tbody id="tbody">
+
+                </tbody>
+            </table>
+        </div>
+        <script>
+            const UserTable = {
+                renderData: function (data) {
+                    let tbody = document.querySelector("#tbody");
+                    tbody.innerHTML = "";
+
+                    data.forEach(item => {
+                        let row = tbody.insertRow();
+                        row.setAttribute("data-Taskid", item.id);
+                        row.insertCell(0).innerHTML = item.image
+                            ? `<img src="${item.image}" alt="Profile Image" class="rounded-full w-12 h-12"/>`
+                            : `<img src="image/image001.png/" alt="empty-image" class="w-12 h-12 rounded-full">`;
+                        row.insertCell(1).innerHTML = item.fname;
+                        row.insertCell(2).innerHTML = item.lname;
+                        row.insertCell(3).innerHTML = item.dob;
+                        row.insertCell(4).innerHTML = item.email;
+                        row.insertCell(5).innerHTML = item.bloodGroup;
+                        row.insertCell(6).innerHTML = item.gender;
+                        row.insertCell(7).innerHTML = item.currentAddress;
+                        row.insertCell(8).innerHTML = item.phoneNumber;
+                        row.insertCell(9).innerHTML = item.role;
+                        row.insertCell(10).innerHTML = item.age;
+                        row.insertCell(11).innerHTML = `<button type="button" class="edit px-1 border mb-1 text-white font-bold rounded bg-blue-200 hover:underline">Edit</button>
+                                                        <button type="button" class="delete px-1 border text-white font-bold rounded bg-red-300 hover:underline">Delete</button>`;
+                    });
+
+                },
+
+                deleteRow: function (id) {
+
+                    const storedDataJSON = localStorage.getItem('adminFormData');
+                    const storedData = JSON.parse(storedDataJSON);
+
+                    storedData.forEach(element => {
+                        console.log(element.id != id);
+                    });
+                    let newData = storedData.filter((item) => item.id != id);
+                    localStorage.setItem("adminFormData", JSON.stringify(newData));
+
+                },
+
+
+                search: function () {
+                    let input = document.getElementById("search").value.toLowerCase().trim();
+
+                    const storedDataJSON = localStorage.getItem('adminFormData');
+                    const storedData = JSON.parse(storedDataJSON);
+
+                    if (storedData && Array.isArray(storedData)) {
+                        let filteredData = storedData.filter(item =>
+                            item.fname.toLowerCase().includes(input) ||
+                            item.lname.toLowerCase().includes(input)
+                        );
+
+                        this.renderData(filteredData);
+                    }
+                },
+
+                init: function () {
+                    document.addEventListener("DOMContentLoaded", () => {
+                        const storedDataJSON = localStorage.getItem('adminFormData');
+                        const storedData = JSON.parse(storedDataJSON);
+
+                        if (storedData && Array.isArray(storedData)) {
+                            this.renderData(storedData);
+                        }
+                    });
+
+                    document.getElementById("search").addEventListener("input", () => {
+                        this.search();
+                    });
+
+                    let addBtn = document.getElementById("add-btn");
+                    addBtn.addEventListener("click", () => {
+                        window.location.href = 'admin.html';
+                    });
+
+
+                    document.getElementById("tbody").addEventListener("click", (event) => {
+                        if (event.target.classList.contains("delete")) {
+                            const row = event.target.closest('tr');
+                            const id = row.getAttribute("data-Taskid");
+                            this.deleteRow(id);
+                            row.remove();
+                        } else if (event.target.classList.contains("edit")) {
+                            const row = event.target.closest('tr');
+                            const id = row.getAttribute("data-Taskid");
+                            window.location.href = "admin.html?id=" + id;
+                        }
+                    });
+                },
+
+            };
+
+            UserTable.init();
+        </script>
+    </main>
+</body>
+
+</html>
