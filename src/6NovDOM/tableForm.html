@@ -18,7 +18,6 @@
         <nav class="rounded-md py-4">
             <input type="text" name="search" id="search" placeholder="search here"
                 class="outline-none w-96 h-10 rounded-full px-4 shadow-md focus:ring focus:ring-blue-300">
-
         </nav>
 
         <div class="bg-white rounded-md shadow-md">
@@ -54,19 +53,40 @@
                     data.forEach(item => {
                         let row = tbody.insertRow();
                         row.setAttribute("data-Taskid", item.id);
-                        row.insertCell(0).innerHTML = item.image
+
+                        let cell0 = row.insertCell(0);
+                        cell0.innerHTML = item.image
                             ? `<img src="${item.image}" alt="Profile Image" class="rounded-full w-12 h-12"/>`
                             : `<img src="image/image001.png/" alt="empty-image" class="w-12 h-12 rounded-full">`;
-                        row.insertCell(1).innerHTML = item.fname;
-                        row.insertCell(2).innerHTML = item.lname;
+                        cell0.setAttribute("class", "p-4")
+
+                        let cell1 = row.insertCell(1);
+                        cell1.innerHTML = item.fname;
+                        cell1.setAttribute("class", "text-center");
+
+                        let cell2 = row.insertCell(2);
+                        cell2.innerHTML = item.lname;
+                        cell2.setAttribute("class", "text-center");
+
                         row.insertCell(3).innerHTML = item.dob;
                         row.insertCell(4).innerHTML = item.email;
-                        row.insertCell(5).innerHTML = item.bloodGroup;
+
+                        let cell5 = row.insertCell(5);
+                        cell5.innerHTML = item.bloodGroup;
+                        cell5.setAttribute("class", "text-center");
+
                         row.insertCell(6).innerHTML = item.gender;
-                        row.insertCell(7).innerHTML = item.currentAddress;
+
+                        let cell7 = row.insertCell(7);
+                        cell7.innerHTML = item.currentAddress;
+
                         row.insertCell(8).innerHTML = item.phoneNumber;
                         row.insertCell(9).innerHTML = item.role;
-                        row.insertCell(10).innerHTML = item.age;
+
+                        let cell10 = row.insertCell(10);
+                        cell10.innerHTML = item.age;
+
+                        cell10.setAttribute("class", "text-center");
                         row.insertCell(11).innerHTML = `<button type="button" class="edit px-1 border mb-1 text-white font-bold rounded bg-blue-200 hover:underline">Edit</button>
                                                         <button type="button" class="delete px-1 border text-white font-bold rounded bg-red-300 hover:underline">Delete</button>`;
                     });
@@ -128,10 +148,9 @@
                     });
 
 
-
                     let addBtn = document.getElementById("add-btn");
                     addBtn.addEventListener("click", () => {
-                        window.location.href = 'admin.html';
+                        window.location.href = 'demoadmin.html';
                     });
 
 
@@ -144,7 +163,7 @@
                         } else if (event.target.classList.contains("edit")) {
                             const row = event.target.closest('tr');
                             const id = row.getAttribute("data-Taskid");
-                            window.location.href = "admin.html?id=" + id;
+                            window.location.href = "demoadmin.html?id=" + id;
                         }
                     });
                 },

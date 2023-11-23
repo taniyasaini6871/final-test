@@ -65,7 +65,7 @@
                 <div class="relative">
                     <div>
                         <img src="https://media.istockphoto.com/id/1337144146/vector/default-avatar-profile-icon-vector.jpg?s=612x612&w=0&k=20&c=BIbFwuv7FxTWvh5S3vB6bkT0Qv8Vn8N5Ffseq84ClGI="
-                            alt="userimg" id="userimage" class="h-16 w-16 absolute right-0 -bottom-2">
+                            alt="userimg" id="userimage" class="h-16 w-16 absolute right-0 -bottom-2 rounded-full">
                     </div>
                     <label for="image" class="block text-sm font-medium text-gray-600">Image:</label>
                     <input type="file" id="image" name="image" accept="image/*"
@@ -122,7 +122,7 @@
     </main>
     <script>
 
-        let obj = {
+        const user = {
 
             submit: document.querySelector("#btn"),
             fname: document.getElementById('fname'),
@@ -146,6 +146,8 @@
             },
 
             submitForm: async function () {
+                const id = new URLSearchParams(location.search).get('id')
+                const existingDataIndex = this.formDataArray.findIndex(item => (item.id) == id);
 
                 if (fname.value.trim() === '') {
                     fnameError.innerHTML = 'First Name is required';
@@ -171,10 +173,12 @@
                 if (bloodGroup.value === "") {
                     bloodGroupError.innerHTML = "Please enter blood group";
                 }
+
                 let imageFile = this.image.files[0];
-                if (!imageFile) {
+                if (!imageFile && !id) {
                     imageError.innerHTML = 'Please select an image file.';
                 }
+
                 if (phoneNumber.value === "") {
                     phoneNumberError.innerHTML = "Enter Phone number";
                 }
@@ -195,8 +199,13 @@
                     let formDataObject = { id: Date.now() };
 
                     for (const [key, value] of formData.entries()) {
+                        console.log(key, value);
+
                         if (value instanceof File) {
+
+                            console.log(value.size);
                             if (value.size > 0) {
+
                                 try {
                                     const result = await this.readFile(value);
                                     formDataObject[key] = result;
@@ -204,27 +213,36 @@
                                     console.error("Error reading file:", error);
                                 }
                             } else {
-                                formDataObject[key] = null;
+                                formDataObject[key] = null
+                                if (id && key === 'image') {
+                                    console.log(existingDataIndex);
+                                    formDataObject[key] = user.formDataArray[existingDataIndex].image;
+                                    console.log(formDataObject);
+                                }
                             }
                         } else {
-                            formDataObject[key] = value;
+                            if (id && key === 'image') {
+                                formDataObject[key] = this.formDataArray[existingDataIndex].image
+                                console.log(formDataObject);
+                            }
+                            else {
+                                formDataObject[key] = value;
+                            }
                         }
                     }
-                    const existingDataIndex = this.formDataArray.findIndex(item => (item.id) == (new URLSearchParams(location.search).get('id')));
 
                     if (existingDataIndex !== -1) {
                         // Update existing data
                         this.formDataArray[existingDataIndex] = formDataObject;
 
-
                     } else {
-                        // Add new form data object into the array
+                        // Add new form data userect into the array
                         this.formDataArray.push(formDataObject);
                     }
 
                     // Store the array in local storage
                     this.updateLocalStorage()
-                    alert('Form data successfully stored in local storage!');
+                    alert('Data saved sucessfully');
                     window.location.href = 'http://127.0.0.1:5500/src/6NovDOM/tableForm.html';
 
                     this.form.reset();
@@ -250,7 +268,7 @@
                 let permanentAddress = this.permanentAddress;
 
                 this.copyAddressCheckbox.addEventListener('change', function () {
-                    if (obj.copyAddressCheckbox.checked) {
+                    if (user.copyAddressCheckbox.checked) {
                         permanentAddress.innerHTML = currentAddress.value;
                     }
                 });
@@ -261,7 +279,7 @@
                 const storedData = JSON.parse(storedDataJSON) ? JSON.parse(storedDataJSON) : [];
                 const imageElement = document.getElementById('userimage');
 
-                storedData.forEach((element,itemIndex) => {
+                storedData.forEach((element, itemIndex) => {
                     if (element.id == new URLSearchParams(location.search).get('id')) {
                         this.fname.value = element.fname;
                         this.lname.value = element.lname;
@@ -293,6 +311,7 @@
                 const roleError = document.getElementById('roleError');
                 const currentAddressError = document.getElementById('currentAddressError');
                 const permanentAddressError = document.getElementById('permanentAddressError');
+                let today = new Date();
 
                 this.fname.addEventListener("input", () => {
 
@@ -346,8 +365,12 @@
                 });
 
                 this.dob.addEventListener("input", () => {
+                    const selectedDate = new Date(this.dob.value);
 
-                    if (this.dob.value !== "") {
+                    if (selectedDate > today) {
+                        dobError.innerHTML = "Invalid date of birth";
+                    }
+                    if (selectedDate < today) {
                         dobError.innerHTML = "";
                     }
 
@@ -377,10 +400,10 @@
                 this.image.addEventListener("change", (e) => {
                     let imageFile = this.image.files;
 
-
                     if (imageFile) {
                         imageError.innerHTML = '';
                     }
+
                 });
 
                 this.phoneNumber.addEventListener("input", () => {
@@ -415,16 +438,15 @@
             }
         }
 
-        obj.validations();
+        user.validations();
 
         document.querySelector("#btn").addEventListener("click", function () {
-            obj.submitForm();
+            user.submitForm();
         });
 
-        obj.form.addEventListener('submit', (e) => {
+        user.form.addEventListener('submit', (e) => {
             e.preventDefault();
         });
-
 
     </script>
 </body>
