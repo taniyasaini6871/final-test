@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>fetch</title>
+    <link rel="stylesheet" href="/dist/output.css">
+</head>
+
+<body>
+    <div class="max-w-md mx-auto bg-white p-8 rounded shadow">
+        <h2 class="text-2xl font-bold mb-4">Users List</h2>
+        <ul id="userList"></ul>
+    </div>
+    <script>
+
+        (async () => {
+            let user = {
+                "title": 'John',
+                "price": 'Smith'
+            };
+
+            const fetchAndUpdateWithUser = async () => {
+                let response = await fetch('https://fakestoreapi.com/products',{
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json;charset=utf-8'
+                    },
+                    body: JSON.stringify(user)
+                })
+
+                let result = await response.json();
+                console.log(result);
+                
+                let allDataResponse = await fetch('https://fakestoreapi.com/products');
+                let allData = await allDataResponse.json();
+
+                let combinedData = [...allData, user];
+                console.log("Combined data:", combinedData);
+
+                localStorage.setItem('Data', JSON.stringify(combinedData));
+
+                const userListElement = document.getElementById('userList');
+                combinedData.forEach(userData => {
+                    const listItem = document.createElement('li');
+                    listItem.className = 'bg-gray-200 p-4 mb-4 rounded flex justify-between';
+                    listItem.textContent = `Title: ${userData.title}, Price: ${userData.price}`;
+                    userListElement.appendChild(listItem);
+                });
+
+            }
+            fetchAndUpdateWithUser();
+        })()
+
+    </script>
+</body>
+
+</html>

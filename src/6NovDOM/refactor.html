@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin form</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
+</head>
+
+<body class="bg-gray-100">
+    <main class="container mx-auto">
+        <h1 class="py-2 font-semibold text-center text-2xl">User Information</h1>
+        <form action="#" class="bg-white p-6 rounded-md shadow-md" id="adminForm">
+            <div class="grid grid-cols-2 gap-1">
+                <div>
+                    <label for="fname" class="block text-sm font-medium text-gray-600">First Name:</label>
+                    <input type="text" name="fname" id="fname" maxlength="15"
+                        class="mt-1 p-2 block w-full border rounded-md">
+                    <span id="fnameError" class="text-red-500"></span>
+                </div>
+                <div>
+                    <label for="lname" class="block text-sm font-medium text-gray-600">Last Name:</label>
+                    <input type="text" name="lname" id="lname" maxlength="15"
+                        class="mt-1 p-2 block w-full border rounded-md">
+                    <span id="lnameError" class="text-red-500"></span>
+                </div>
+                <div>
+                    <label for="age" class="block text-sm font-medium text-gray-600">Age:</label>
+                    <input type="number" id="age" name="age" required class="mt-1 p-2 block w-full border rounded-md">
+                    <span id="ageError" class="text-red-500"></span>
+                </div>
+
+                <div>
+                    <label for="gender" class="block text-sm font-medium text-gray-600">Gender:</label>
+                    <select id="gender" name="gender" required class="mt-1 p-2 block w-full border rounded-md">
+                        <option value="" disabled selected>Select gender</option>
+                        <option value="male">Male</option>
+                        <option value="female">Female</option>
+                        <option value="other">Other</option>
+                    </select>
+                    <span id="genderError" class="text-red-500"></span>
+                </div>
+
+                <div>
+                    <label for="email" class="block text-sm font-medium text-gray-600">Email:</label>
+                    <input type="email" id="email" name="email" required
+                        class="mt-1 p-2 block w-full border rounded-md">
+                    <span id="emailError" class="text-red-500"></span>
+                </div>
+
+                <div>
+                    <label for="dob" class="block text-sm font-medium text-gray-600">Date of Birth:</label>
+                    <input type="date" id="dob" name="dob" required class="mt-1 p-2 block w-full border rounded-md">
+                    <span id="dobError" class="text-red-500"></span>
+                </div>
+
+                <div>
+                    <label for="bloodGroup" class="block text-sm font-medium text-gray-600">Blood Group:</label>
+                    <input type="text" id="bloodGroup" name="bloodGroup" required
+                        class="mt-1 p-2 block w-full border rounded-md">
+                    <span id="bloodGroupError" class="text-red-500"></span>
+                </div>
+
+                <div class="relative">
+                    <div>
+                        <img src="https://media.istockphoto.com/id/1337144146/vector/default-avatar-profile-icon-vector.jpg?s=612x612&w=0&k=20&c=BIbFwuv7FxTWvh5S3vB6bkT0Qv8Vn8N5Ffseq84ClGI="
+                            alt="userimg" id="userimage" class="h-16 w-16 absolute right-0 -bottom-2 rounded-full">
+                    </div>
+                    <label for="image" class="block text-sm font-medium text-gray-600">Image:</label>
+                    <input type="file" id="image" name="image" accept="image/*"
+                        class="mt-1 p-2 block w-3/4  border rounded-md">
+                    <span id="imageError" class="text-red-500"></span>
+                </div>
+
+                <div>
+                    <label for="phoneNumber" class="block text-sm font-medium text-gray-600">Phone Number:</label>
+                    <input type="tel" id="phoneNumber" name="phoneNumber" required
+                        class="mt-1 p-2 block w-full border rounded-md">
+                    <span id="phoneNumberError" class="text-red-500"></span>
+                </div>
+
+                <div>
+                    <label for="role" class="block text-sm font-medium text-gray-600">Roles:</label>
+                    <select id="role" name="role" required class="mt-1 p-2 block w-full border rounded-md">
+                        <option value="" disabled selected>Select role</option>
+                        <option value="employee">Employee</option>
+                        <option value="hr">HR</option>
+                        <option value="tl">Team Leader</option>
+                    </select>
+                    <span id="roleError" class="text-red-500"></span>
+                </div>
+
+                <div>
+                    <label for="currentAddress" class="block text-sm font-medium text-gray-600">Current Address:</label>
+                    <textarea id="currentAddress" name="currentAddress" required
+                        class="mt-1 p-2 block w-full border rounded-md"></textarea>
+                    <span id="currentAddressError" class="text-red-500"></span>
+                    <div>
+                        <input type="checkbox" id="copyAddress">
+                        <label for="copyAddress" class="text-sm font-medium text-gray-600">Current Address same as
+                            Permanent
+                            Address</label>
+                    </div>
+                </div>
+
+                <div>
+                    <label for="permanentAddress" class="block text-sm font-medium text-gray-600">Permanent
+                        Address:</label>
+                    <textarea id="permanentAddress" name="permanentAddress" required
+                        class="mt-1 p-2 block w-full border rounded-md"></textarea>
+                    <span id="permanentAddressError" class="text-red-500"></span>
+                </div>
+            </div>
+
+            <div class="text-center mt-4">
+                <button type="button" id="btn"
+                    class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-md">Submit</button>
+            </div>
+
+        </form>
+    </main>
+    <script>
+
+        const user = {
+
+            submit: document.querySelector("#btn"),
+            fname: document.getElementById('fname'),
+            lname: document.getElementById('lname'),
+            age: document.getElementById('age'),
+            gender: document.getElementById('gender'),
+            email: document.getElementById('email'),
+            dob: document.getElementById('dob'),
+            bloodGroup: document.getElementById('bloodGroup'),
+            image: document.getElementById('image'),
+            phoneNumber: document.getElementById('phoneNumber'),
+            role: document.getElementById('role'),
+            currentAddress: document.getElementById('currentAddress'),
+            permanentAddress: document.getElementById('permanentAddress'),
+            form: document.getElementById('adminForm'),
+            copyAddressCheckbox: document.getElementById('copyAddress'),
+            formDataArray: JSON.parse(localStorage.getItem('adminFormData')) || [],
+
+            init() {
+                this.validations();
+                this.form.addEventListener('submit', (e) => this.handleSubmit(e));
+                this.submitButton.addEventListener('click', () => this.submitForm());
+            },
+
+            validations() {
+                this.fname.addEventListener("input", () => this.validateField(this.fname, 'First Name should contain only alphabets.'));
+                this.lname.addEventListener("input", () => this.validateField(this.lname, 'Last Name should contain only alphabets.'));
+                this.age.addEventListener("input", () => this.validateAge());
+                this.gender.addEventListener("input", () => this.validateGender());
+                this.email.addEventListener("input", () => this.validateEmail());
+                this.dob.addEventListener("input", () => this.validateDOB());
+                this.role.addEventListener("input", () => this.validateField(this.role, ''));
+                this.bloodGroup.addEventListener("input", () => this.validateBloodGroup());
+                this.image.addEventListener("change", (e) => this.validateImage());
+                this.phoneNumber.addEventListener("input", () => this.validatePhoneNumber());
+                this.currentAddress.addEventListener("input", () => this.validateField(this.currentAddress, ''));
+                this.permanentAddress.addEventListener("input", () => this.validateField(this.permanentAddress, ''));
+                this.handleCheckboxState();
+                this.populateFormData();
+            },
+
+            validateField(field, errorMessage) {
+                const errorElement = document.getElementById(`${field.id}Error`);
+
+                if (!/^[a-zA-Z]+$/.test(field.value)) {
+                    errorElement.innerHTML = errorMessage;
+                } else {
+                    errorElement.innerHTML = '';
+                }
+            },
+
+            validateAge() {
+                let ageValue = this.age.value;
+                const ageError = document.getElementById('ageError');
+
+                if (ageValue < 18) {
+                    ageError.innerHTML = 'Age must be a number greater than 18.';
+                } else {
+                    ageError.innerHTML = '';
+                }
+            },
+
+            validateGender() {
+                const genderError = document.getElementById('genderError');
+
+                if (this.gender.value !== '') {
+                    genderError.innerHTML = '';
+                }
+            },
+
+            validateEmail() {
+                let emailValue = this.email.value;
+                const emailError = document.getElementById('emailError');
+                const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+
+                if (!emailRegex.test(emailValue)) {
+                    emailError.innerHTML = 'Please enter a valid email address.';
+                } else {
+                    emailError.innerHTML = '';
+                }
+            },
+
+            validateDOB() {
+                const selectedDate = new Date(this.dob.value);
+                const dobError = document.getElementById('dobError');
+                let today = new Date();
+
+                if (selectedDate > today) {
+                    dobError.innerHTML = "Invalid date of birth";
+                } else {
+                    dobError.innerHTML = "";
+                }
+            },
+
+            validateBloodGroup() {
+                let bloodGroupValue = this.bloodGroup.value;
+                const bloodGroupError = document.getElementById('bloodGroupError');
+                const validBloodGroups = ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'];
+
+                if (!validBloodGroups.includes(bloodGroupValue.toUpperCase())) {
+                    bloodGroupError.innerHTML = 'Please enter a valid blood group (e.g., A+, B-, O-).';
+                } else {
+                    bloodGroupError.innerHTML = '';
+                }
+            },
+
+            validateImage() {
+                let imageFile = this.image.files;
+                const imageError = document.getElementById('imageError');
+
+                if (!imageFile) {
+                    imageError.innerHTML = 'Please select an image file.';
+                } else {
+                    imageError.innerHTML = '';
+                }
+            },
+
+            validatePhoneNumber() {
+                let phoneNumberValue = this.phoneNumber.value;
+                const phoneNumberError = document.getElementById('phoneNumberError');
+                const phoneRegex = /^[6-9]\d{9}$/;
+
+                if (!phoneRegex.test(phoneNumberValue)) {
+                    phoneNumberError.innerHTML = 'Please enter a valid Indian phone number.';
+                } else {
+                    phoneNumberError.innerHTML = '';
+                }
+            },
+
+            handleCheckboxState() {
+                let permanentAddress = this.permanentAddress;
+
+                this.copyAddressCheckbox.addEventListener('change', function () {
+                    if (user.copyAddressCheckbox.checked) {
+                        permanentAddress.innerHTML = currentAddress.value;
+                    }
+                });
+            },
+
+            populateFormData() {
+                const storedDataJSON = localStorage.getItem('adminFormData');
+                const storedData = JSON.parse(storedDataJSON) || [];
+                const imageElement = document.getElementById('userimage');
+
+                storedData.forEach((element) => {
+                    if (element.id == new URLSearchParams(location.search).get('id')) {
+                        this.fname.value = element.fname;
+                        this.lname.value = element.lname;
+                        this.age.value = element.age;
+                        this.gender.value = element.gender;
+                        this.email.value = element.email;
+                        this.dob.value = element.dob;
+                        this.bloodGroup.value = element.bloodGroup;
+                        this.phoneNumber.value = element.phoneNumber;
+                        this.role.value = element.role;
+                        this.currentAddress.value = element.currentAddress;
+                        this.permanentAddress.value = element.permanentAddress;
+                        imageElement.src = element.image || 'https://media.istockphoto.com/id/1337144146/vector/default-avatar-profile-icon-vector.jpg?s=612x612&w=0&k=20&c=BIbFwuv7FxTWvh5S3vB6bkT0Qv8Vn8N5Ffseq84ClGI=';
+                    }
+                });
+            },
+
+            submitForm() {
+                const id = new URLSearchParams(location.search).get('id');
+                const existingDataIndex = this.formDataArray.findIndex(item => (item.id) == id);
+
+                // Validate form fields
+                if (this.validateForm()) {
+                    // If validation passes, proceed with form submission
+
+                    // Your submission logic here
+                    // ...
+
+                    // Save form data to local storage or perform other actions
+                    this.saveFormData();
+                }
+            },
+
+            validateForm() {
+                this.validateField(this.fname, 'First Name is required');
+                this.validateField(this.lname, 'Last Name is required');
+                this.validateAge();
+                this.validateGender();
+                this.validateEmail();
+                this.validateDOB();
+                this.validateField(this.role, 'Please select Role');
+                this.validateBloodGroup();
+                this.validateImage();
+                this.validatePhoneNumber();
+                this.validateField(this.currentAddress, 'Fill address');
+                this.validateField(this.permanentAddress, 'Fill address');
+
+                // Return true if all validations pass, false otherwise
+                return !this.hasValidationError();
+            },
+
+            hasValidationError() {
+                // Check if any validation error is present
+                return !!(
+                    document.getElementById('fnameError').innerHTML || document.getElementById('lnameError').innerHTML || 
+                    document.getElementById('ageError').innerHTML || document.getElementById('genderError').innerHTML ||
+                    document.getElementById('emailError').innerHTML || document.getElementById('dobError').innerHTML ||
+                    document.getElementById('roleError').innerHTML || document.getElementById('bloodGroupError').innerHTML ||
+                    document.getElementById('imageError').innerHTML || document.getElementById('phoneNumberError').innerHTML ||
+                    document.getElementById('currentAddressError').innerHTML || document.getElementById('permanentAddressError').innerHTML
+                );
+            },
+
+            saveFormData() {
+                // Save form data to local storage or perform other actions
+                // ...
+            },
+
+            updateLocalStorage() {
+                localStorage.setItem('adminFormData', JSON.stringify(this.formDataArray));
+            },
+
+            handleSubmit(e) {
+                e.preventDefault();
+            }
+        };
+
+        user.init();
+
+       
+    </script>
+</body>
+
+</html>

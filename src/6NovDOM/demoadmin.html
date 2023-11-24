@@ -202,10 +202,7 @@
                         console.log(key, value);
 
                         if (value instanceof File) {
-
-                            console.log(value.size);
                             if (value.size > 0) {
-
                                 try {
                                     const result = await this.readFile(value);
                                     formDataObject[key] = result;
@@ -217,7 +214,6 @@
                                 if (id && key === 'image') {
                                     console.log(existingDataIndex);
                                     formDataObject[key] = user.formDataArray[existingDataIndex].image;
-                                    console.log(formDataObject);
                                 }
                             }
                         } else {
