@@ -42,7 +42,7 @@
                 } else {
                     console.log("HTTP-Error: " + allDataResponse.status);
                 }
-                
+
                 localStorage.setItem('ProductsListing', JSON.stringify(this.allData));
                 this.listProducts(this.allData);
                 this.filterProductsAsPerCategory(this.allData);
@@ -75,17 +75,22 @@
 
                 let selectedFilter = document.querySelector('#filters');
                 let originalData = arr;
-                selectedFilter.addEventListener('change', () => {
+                selectedFilter.addEventListener('change', async () => {
                     let selectedFilterValue = selectedFilter.value;
 
                     if (selectedFilterValue === 'all') {
                         this.listProducts(originalData);
                     } else {
-                        let filteredProduct = originalData.filter((product) => {
-                            return product.category == selectedFilterValue;
-                        });
-                        this.listProducts(filteredProduct);
+                        let response = await fetch(`https://dummyjson.com/products/category/${selectedFilterValue}`);
+
+                        if (response.ok) {
+                            let jsonData = await response.json();
+                            display.listProducts(jsonData.products);
+                        } else {
+                            console.error('Error:', response.status);
+                        }
                     }
+
                 });
             },
 
