@@ -35,9 +35,9 @@
                     <label for="gender" class="block text-sm font-medium text-gray-600">Gender:</label>
                     <select id="gender" name="gender" required class="mt-1 p-2 block w-full border rounded-md">
                         <option value="" disabled selected>Select gender</option>
-                        <option value="male">Male</option>
-                        <option value="female">Female</option>
-                        <option value="other">Other</option>
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
+                        <option value="Other">Other</option>
                     </select>
                     <span id="genderError" class="text-red-500"></span>
                 </div>
@@ -74,6 +74,25 @@
                 </div>
 
                 <div>
+                    <label for="password" class="block text-sm font-medium text-gray-600">Enter Password</label>
+                    <input type="password" id="password" name="password"
+                        class="mt-1 p-2 block w-full  border rounded-md" required>
+                    <div>
+                        <input type="checkbox" id="showpassword" class="my-3">
+                        <label for="showpassword" class="text-sm font-medium text-gray-600">Show Password</label>
+                    </div>
+                    <span id="passwordError" class="text-red-500"></span>
+                </div>
+
+                <div>
+                    <label for="password2" class="block text-sm font-medium text-gray-600">Confirm Password</label>
+                    <input type="password" id="password2" name="password2"
+                        class="mt-1 p-2 block w-full  border rounded-md" required>
+                    <span id="password2Error" class="text-red-500"></span>
+
+                </div>
+
+                <div>
                     <label for="phoneNumber" class="block text-sm font-medium text-gray-600">Phone Number:</label>
                     <input type="tel" id="phoneNumber" name="phoneNumber" required
                         class="mt-1 p-2 block w-full border rounded-md">
@@ -84,9 +103,9 @@
                     <label for="role" class="block text-sm font-medium text-gray-600">Roles:</label>
                     <select id="role" name="role" required class="mt-1 p-2 block w-full border rounded-md">
                         <option value="" disabled selected>Select role</option>
-                        <option value="employee">Employee</option>
-                        <option value="hr">HR</option>
-                        <option value="tl">Team Leader</option>
+                        <option value="Employee">Employee</option>
+                        <option value="HR">HR</option>
+                        <option value="Team Leader">Team Leader</option>
                     </select>
                     <span id="roleError" class="text-red-500"></span>
                 </div>
@@ -139,6 +158,9 @@
             permanentAddress: document.getElementById('permanentAddress'),
             form: document.getElementById('adminForm'),
             copyAddressCheckbox: document.getElementById('copyAddress'),
+            password: document.getElementById('password'),
+            confirmPassword: document.getElementById('password2'),
+            showPassword: document.getElementById('showpassword'),
             formDataArray: JSON.parse(localStorage.getItem('adminFormData')) || [],
 
             updateLocalStorage: function () {
@@ -149,28 +171,28 @@
                 const id = new URLSearchParams(location.search).get('id')
                 const existingDataIndex = this.formDataArray.findIndex(item => (item.id) == id);
 
-                if (fname.value.trim() === '') {
+                if (this.fname.value.trim() === '') {
                     fnameError.innerHTML = 'First Name is required';
                 }
-                if (lname.value.trim() === '') {
+                if (this.lname.value.trim() === '') {
                     lnameError.innerHTML = 'Last Name is required';
                 }
-                if (age.value === '') {
+                if (this.age.value === '') {
                     ageError.innerHTML = 'Age is required';
                 }
-                if (gender.value === '') {
+                if (this.gender.value === '') {
                     genderError.innerHTML = 'Select gender';
                 }
-                if (email.value === '') {
+                if (this.email.value === '') {
                     emailError.innerHTML = 'Please Enter email';
                 }
-                if (dob.value === '') {
+                if (this.dob.value === '') {
                     dobError.innerHTML = 'Please select DOB'
                 }
-                if (role.value === '') {
+                if (this.role.value === '') {
                     roleError.innerHTML = 'Please select Role'
                 }
-                if (bloodGroup.value === "") {
+                if (this.bloodGroup.value === "") {
                     bloodGroupError.innerHTML = "Please enter blood group";
                 }
 
@@ -179,20 +201,29 @@
                     imageError.innerHTML = 'Please select an image file.';
                 }
 
-                if (phoneNumber.value === "") {
+                if (this.password.value === "") {
+                    passwordError.innerHTML = "Enter Password";
+                }
+
+                if (this.confirmPassword.value === "") {
+                    password2Error.innerHTML = "Enter Password";
+                }
+
+                if (this.phoneNumber.value === "") {
                     phoneNumberError.innerHTML = "Enter Phone number";
                 }
-                if (currentAddress.value === "") {
+
+                if (this.currentAddress.value === "") {
                     currentAddressError.innerHTML = "Fill address";
                 }
-                if (permanentAddress.value === "") {
+                if (this.permanentAddress.value === "") {
                     permanentAddressError.innerHTML = "Fill address";
                 }
 
                 if (!fnameError.innerHTML && !lnameError.innerHTML && !ageError.innerHTML &&
                     !genderError.innerHTML && !emailError.innerHTML && !dobError.innerHTML &&
                     !bloodGroupError.innerHTML && !imageError.innerHTML && !phoneNumberError.innerHTML &&
-                    !currentAddressError.innerHTML && !permanentAddressError.innerHTML && !roleError.innerHTML) {
+                    !currentAddressError.innerHTML && !permanentAddressError.innerHTML && !roleError.innerHTML && !passwordError.innerHTML && !password2Error.innerHTML) {
 
                     const formData = new FormData(this.form);
 
@@ -240,24 +271,9 @@
                     this.updateLocalStorage()
                     alert('Data saved sucessfully');
                     window.location.href = 'http://127.0.0.1:5500/src/6NovDOM/tableForm.html';
-
                     this.form.reset();
                 }
-            },
-            readFile: function (file) {
-                return new Promise((resolve, reject) => {
-                    const reader = new FileReader();
 
-                    reader.onload = function () {
-                        resolve(reader.result);
-                    };
-
-                    reader.onerror = function (error) {
-                        reject(error);
-                    };
-
-                    reader.readAsDataURL(file);
-                });
             },
 
             handleCheckboxState: function () {
@@ -268,6 +284,17 @@
                         permanentAddress.innerHTML = currentAddress.value;
                     }
                 });
+
+                this.showPassword.addEventListener('click', function () {
+
+                    if (user.password.type === "password") {
+                        user.password.type = "text";
+                    } else {
+                        user.password.type = "password";
+                    }
+                })
+
+
             },
 
             populateFormData: function () {
@@ -288,6 +315,8 @@
                         this.role.value = element.role;
                         this.currentAddress.value = element.currentAddress;
                         this.permanentAddress.value = element.permanentAddress;
+                        this.password.value = element.password;
+                        this.confirmPassword.value = element.confirmPassword;
                         imageElement.src = element.image || 'https://media.istockphoto.com/id/1337144146/vector/default-avatar-profile-icon-vector.jpg?s=612x612&w=0&k=20&c=BIbFwuv7FxTWvh5S3vB6bkT0Qv8Vn8N5Ffseq84ClGI=';
                     }
                 });
@@ -307,6 +336,9 @@
                 const roleError = document.getElementById('roleError');
                 const currentAddressError = document.getElementById('currentAddressError');
                 const permanentAddressError = document.getElementById('permanentAddressError');
+                const passwordError = document.getElementById('passwordError');
+                const password2Error = document.getElementById('password2Error');
+
                 let today = new Date();
 
                 this.fname.addEventListener("input", () => {
@@ -360,6 +392,32 @@
                     }
                 });
 
+                this.password.addEventListener("input", () => {
+                    let passwordValue = this.password.value;
+                    let regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@.#$!%*?&^])[A-Za-z\d@.#$!%*?&]{8,15}$/;
+
+                    if (!regex.test(passwordValue)) {
+                        passwordError.innerHTML = "Min eight characters, at least one letter, number , speacial character.";
+                    }
+                    if (regex.test(passwordValue) || passwordValue === "") {
+                        passwordError.innerHTML = "";
+                    }
+
+                })
+
+                this.confirmPassword.addEventListener("input", () => {
+                    let password2Value = this.confirmPassword.value;
+                    let passwordValue = this.password.value;
+
+                    if (password2Value !== passwordValue) {
+                        password2Error.innerHTML = "your password does not matched";
+                    }
+                    if (password2Value === passwordValue) {
+                        password2Error.innerHTML = "";
+                    }
+
+                })
+
                 this.dob.addEventListener("input", () => {
                     const selectedDate = new Date(this.dob.value);
 
@@ -401,6 +459,8 @@
                     }
 
                 });
+
+
 
                 this.phoneNumber.addEventListener("input", () => {
                     let phoneNumberValue = this.phoneNumber.value;

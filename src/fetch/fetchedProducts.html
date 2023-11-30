@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fetch Data</title>
+    <link rel="stylesheet" href="/dist/output.css">
+</head>
+
+<body>
+    <main>
+        <nav class="flex items-center">
+            <form action="" class="p-2">
+                <input type="text" id="search" class="outline-none border-2 p-2 rounded"
+                    placeholder="Search for products">
+            </form>
+            <div>
+                <select name="filters" id="filters" class="border h-full p-2">
+                    <option value="all">All</option>
+                    <option value="skincare">skincare</option>
+                    <option value="groceries">groceries</option>
+                    <option value="home-decoration">home-decoration</option>
+                    <option value="smartphones">smartphones</option>
+                </select>
+            </div>
+        </nav>
+        <div id="js-container" class="grid grid-cols-3 grid-rows-3">
+        </div>
+    </main>
+    <script>
+        const display = {
+
+            allData: [],
+
+            getProducts: async function () {
+                let allDataResponse = await fetch('https://dummyjson.com/products');
+
+                if (allDataResponse.ok) {
+                    let data = await allDataResponse.json();
+                    this.allData = data.products;
+                } else {
+                    console.log("HTTP-Error: " + allDataResponse.status);
+                }
+                
+                localStorage.setItem('ProductsListing', JSON.stringify(this.allData));
+                this.listProducts(this.allData);
+                this.filterProductsAsPerCategory(this.allData);
+            },
+
+
+            listProducts: function (arr) {
+                let container = document.querySelector('#js-container');
+                container.innerHTML = '';
+
+                arr.forEach(product => {
+
+                    let boundry = document.createElement("div");
+                    boundry.setAttribute('class', 'border-2 m-2 shadow');
+                    container.appendChild(boundry);
+
+                    let productImage = document.createElement('img');
+                    productImage.setAttribute('src', product.images[0]);
+                    productImage.classList.add("h-24", "w-24");
+                    boundry.appendChild(productImage);
+
+                    let listItem = document.createElement('p');
+                    listItem.textContent = `Title: ${product.title}, Price: ${product.price}`;
+                    boundry.appendChild(listItem);
+
+                })
+            },
+
+            filterProductsAsPerCategory: function (arr) {
+
+                let selectedFilter = document.querySelector('#filters');
+                let originalData = arr;
+                selectedFilter.addEventListener('change', () => {
+                    let selectedFilterValue = selectedFilter.value;
+
+                    if (selectedFilterValue === 'all') {
+                        this.listProducts(originalData);
+                    } else {
+                        let filteredProduct = originalData.filter((product) => {
+                            return product.category == selectedFilterValue;
+                        });
+                        this.listProducts(filteredProduct);
+                    }
+                });
+            },
+
+            search: searchFunctionality = async (data) => {
+                let response = await fetch(`https://dummyjson.com/products/search?q=${data}`)
+                if (data === "") {
+                    display.listProducts(display.allData);
+                }
+                if (response.ok) {
+                    let jsonData = await response.json();
+                    display.listProducts(jsonData.products);
+                }
+            },
+
+            debouce: debouceFunctionality = (callBack, delay) => {
+                let debouce = null;
+                return () => {
+                    let searchValue = document.getElementById('search').value.trim();
+                    clearTimeout(debouce)
+                    debouce = setTimeout(() => {
+                        searchFunctionality(searchValue);
+                    }, 1000)
+                }
+
+            },
+
+            searchedProduct: function () {
+                let search = document.getElementById('search')
+                search.addEventListener('input', debouceFunctionality(searchFunctionality, 500))
+            }
+        }
+
+        display.searchedProduct()
+        display.getProducts();
+
+    </script>
+</body>
+
+</html>
