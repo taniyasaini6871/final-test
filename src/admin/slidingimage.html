@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sliding Images</title>
+    <link rel="stylesheet" href="/dist/output.css">
+</head>
+
+<body>
+    <main>
+        <section class="border-2 border-black w-10/12 m-auto h-96 mt-36 relative overflow-hidden">
+
+            <img src="https://images.unsplash.com/photo-1514448120241-6c93b4c3591a?q=80&w=2071&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                class="images w-full h-full absolute duration-300">
+
+            <img src="https://media.istockphoto.com/id/1126345377/photo/rice-in-a-wooden-bowl.jpg?s=2048x2048&w=is&k=20&c=BN7TuJwGcrqyMJVMcl3MMM9WCldSxAiAMM1CV5TqyzI="
+                class="images w-full h-full absolute duration-300">
+
+            <img src="https://images.unsplash.com/photo-1507905394137-427b42bcdd3b?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3Ds"
+                class="images w-full h-full absolute duration-300">
+
+
+            <button type="button" id="previous" class="absolute bg-white rounded-full z-20 top-1/2">
+                <svg class="w-8 h-8" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                    <polyline fill="none" stroke="currentColor" stroke-width="2" points="9 6 15 12 9 18"
+                        transform="matrix(-1 0 0 1 24 0)"></polyline>
+                </svg>
+            </button>
+            <button type="button" id="next" class="absolute bg-white rounded-full z-20 top-1/2 right-0">
+                <svg class="w-8 h-8" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M0 0h24v24H0z" fill="none"></path>
+                    <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path>
+                </svg>
+            </button>
+
+        </section>
+    </main>
+    <script>
+        const slide = {
+            images: document.querySelectorAll('.images'),
+            move : 0,
+            image: function () {
+                this.images.forEach((image, index) => {
+                    image.style.left = `${index * 100}%`
+                })
+                
+            },
+
+            moveImage: function () {
+                this.images.forEach((image) => {
+                    image.style.transform = `translateX(-${this.move * 100}%)`;
+                })
+            },
+
+            tonextImage: function() {
+                let nextbtn =  document.querySelector('#next');
+                nextbtn.addEventListener("click" ,() => {
+                if(this.move == this.images.length-1){
+                    this.move = 2;
+                    this.moveImage();
+                } else {
+                    this.move++;
+                    this.moveImage();
+                }
+                })
+            },
+
+            toprevousImage: function() {
+                let previousBtn =  document.querySelector('#previous');
+                previousBtn.addEventListener("click" ,() => {
+                  if(this.move == 0){
+                    this.move = 0;
+                    this.moveImage();
+                  }else {
+                      this.move--;
+                      this.moveImage();
+                  }
+                })
+            },
+
+
+        }
+        slide.image()
+        slide.tonextImage()
+        slide.toprevousImage()
+    </script>
+</body>
+</html>

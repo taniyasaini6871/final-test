@@ -10,22 +10,25 @@
 
 <body>
     <main>
-        <nav class="flex items-center">
-            <form action="" class="p-2">
-                <input type="text" id="search" class="outline-none border-2 p-2 rounded"
-                    placeholder="Search for products">
-            </form>
-            <div>
-                <select name="filters" id="filters" class="border h-full p-2">
-                    <option value="all">All</option>
-                    <option value="skincare">skincare</option>
-                    <option value="groceries">groceries</option>
-                    <option value="home-decoration">home-decoration</option>
-                    <option value="smartphones">smartphones</option>
-                </select>
+        <nav class="flex justify-between items-center p-2">
+            <div class="flex items-center">
+                <form action="" class="p-2">
+                    <input type="text" id="search" class="outline-none border-2 p-2 rounded"
+                        placeholder="Search for products">
+                </form>
+                <div>
+                    <select name="filters" id="filters" class="border h-full p-2">
+                        <option value="all">All</option>
+                        <option value="skincare">skincare</option>
+                        <option value="groceries">groceries</option>
+                        <option value="home-decoration">home-decoration</option>
+                        <option value="smartphones">smartphones</option>
+                    </select>
+                </div>
             </div>
+            <button type="button" class="border mr-5 p-1 px-2 bg-blue-500 text-white rounded">Add Product</button>
         </nav>
-        <div id="js-container" class="grid grid-cols-3 grid-rows-3">
+        <div id="js-container" class="grid lg:grid-cols-4 md:grid-cols-2 gap-1">
         </div>
     </main>
     <script>
@@ -56,16 +59,26 @@
                 arr.forEach(product => {
 
                     let boundry = document.createElement("div");
-                    boundry.setAttribute('class', 'border-2 m-2 shadow');
+                    boundry.setAttribute('class', 'border-2 m-2 w-80 h-full shadow relative  bg-white p-4 rounded-md flex flex-col items-center');
                     container.appendChild(boundry);
 
+                    let anchor = document.createElement("a");
+                    anchor.setAttribute("href", `http://127.0.0.1:5500/src/fetch/productdisplay.html?id=${product.id}`);
+                    anchor.addEventListener('click', (event) => {
+                        event.preventDefault();
+                        window.location.href = anchor.getAttribute('href');
+                    });
+                    anchor.setAttribute("class", "absolute z-10 inset-0");
+                    boundry.appendChild(anchor);
+
                     let productImage = document.createElement('img');
-                    productImage.setAttribute('src', product.images[0]);
-                    productImage.classList.add("h-24", "w-24");
+                    productImage.setAttribute('src', product.thumbnail);
+                    productImage.classList.add("h-96", "w-full","mb-2","object-contain");
                     boundry.appendChild(productImage);
 
                     let listItem = document.createElement('p');
                     listItem.textContent = `Title: ${product.title}, Price: ${product.price}`;
+                    listItem.setAttribute('class', 'text-center font-semibold text-gray-800');
                     boundry.appendChild(listItem);
 
                 })
