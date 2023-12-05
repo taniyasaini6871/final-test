@@ -17,7 +17,6 @@
                         <img id="js-img" src="" alt="Product Image" class="w-96 h-96">
                     </div>
                     <div id="img-container" class="flex items-center justify-evenly mt-8">
-
                     </div>
                 </div>
 
@@ -40,55 +39,63 @@
     <script>
         const show = {
 
+            title: document.querySelector('#js-title'),
+            discription: document.querySelector('#js-discription'),
+            rating: document.querySelector('#js-rating'),
+            stock: document.querySelector('#js-stock'),
+            price: document.querySelector('#js-price'),
+            discount: document.querySelector('#js-discount'),
+            image: document.querySelector("#js-img"),
+            brand: document.querySelector("#js-brand"),
+            imagesContainer: document.querySelector('#img-container'),
+            urlId: new URLSearchParams(location.search).get('id'),
+
             product: async function () {
-                let title = document.querySelector('#js-title');
-                let discription = document.querySelector('#js-discription');
-                let rating = document.querySelector('#js-rating');
-                let stock = document.querySelector('#js-stock');
-                let price = document.querySelector('#js-price');
-                let discount = document.querySelector('#js-discount');
-                let image = document.querySelector("#js-img");
-                let brand = document.querySelector("#js-brand");
 
-                
-                let urlId = new URLSearchParams(location.search).get('id');
-                let response = await fetch(`https://dummyjson.com/products/${urlId}`);
-                let imagesContainer = document.querySelector('#img-container');
+                try {
 
-                if (response.ok) {
-                    let data = await response.json();
+                    let response = await fetch(`https://dummyjson.com/products/${this.urlId}`);
 
-                    if (data.id == urlId) {
-                        title.innerHTML = data.title;
-                        discription.innerHTML = data.description;
-                        rating.innerHTML = `Rating: ${data.rating}`;
-                        stock.innerHTML = `Stock: ${data.stock}`;
-                        price.innerHTML = `Price: $${data.price}`;
-                        discount.innerHTML = `Discount: ${data.discountPercentage}%`;
-                        image.src = data.thumbnail;
-                        brand.innerHTML = `Brand: ${data.brand}`;
+                    if (response.ok) {
 
-                        data.images.map((item) => {
-                            let slidingimages = document.createElement("img");
-                            slidingimages.setAttribute("src", `${item}`);
-                            slidingimages.setAttribute("class", "h-20 w-20 border-2 p-2 cursor-pointer")
-                            imagesContainer.appendChild(slidingimages);
+                        let data = await response.json();
 
-                            slidingimages.addEventListener("click", () => {
-                                image.src = slidingimages.src;
+                        if (data.id == this.urlId) {
+
+                            this.title.innerHTML = data.title;
+                            this.discription.innerHTML = data.description;
+                            this.rating.innerHTML = `Rating: ${data.rating}`;
+                            this.stock.innerHTML = `Stock: ${data.stock}`;
+                            this.price.innerHTML = `Price: $${data.price}`;
+                            this.discount.innerHTML = `Discount: ${data.discountPercentage}%`;
+                            this.image.src = data.thumbnail;
+                            this.brand.innerHTML = `Brand: ${data.brand}`;
+
+                            data.images.map((item) => {
+
+                                let slidingimages = document.createElement("img");
+                                slidingimages.setAttribute("src", `${item}`);
+                                slidingimages.setAttribute("class", "h-20 w-20 border-2 p-2 cursor-pointer")
+                                this.imagesContainer.appendChild(slidingimages);
+
+                                slidingimages.addEventListener("mouseover", () => {
+                                    this.image.src = slidingimages.src;
+                                })
                             })
-                        })
 
-                    } else {
-                        console.log("Product not found");
+                        } else {
+                            console.log("Product not found");
+                        }
                     }
+                } catch (error) {
 
-                } else {
-                    console.log("HTTP-Error: " + response.status);
+                    console.error(error);
+
                 }
-            },
-
+            }
         }
+        
+
         show.product()
     </script>
 </body>
