@@ -8,9 +8,37 @@
     <link rel="stylesheet" href="/dist/output.css">
 </head>
 
-<body class="bg-gray-100">
-    <main>
-        <div class="container mx-auto mt-20 p-8 bg-white rounded-lg shadow-lg">
+<body class="bg-gray-100 ">
+    <main class="relative">
+        <nav class="p-4 bg-blue-500 w-full ">
+            <ul class="flex justify-between px-6">
+                <li>
+                    <input type="text" id="search" class="outline-none border-2 px-2 rounded"
+                        placeholder="Search for products">
+                </li>
+                <li id="js-cart" class="cursor-pointer flex gap-2 text-white text-lg font-semibold">
+                    <svg class="w-7 h-7" xmlns="http://www.w3.org/2000/svg" fill="currentColor" stroke="none"
+                        viewBox="0 0 24 24">
+                        <path
+                            d="M21.822 7.431A1 1 0 0 0 21 7H7.333L6.179 4.23A1.994 1.994 0 0 0 4.333 3H2v2h2.333l4.744 11.385A1 1 0 0 0 10 17h8c.417 0 .79-.259.937-.648l3-8a1 1 0 0 0-.115-.921zM17.307 15h-6.64l-2.5-6h11.39l-2.25 6z">
+                        </path>
+                        <circle cx="10.5" cy="19.5" r="1.5"></circle>
+                        <circle cx="17.5" cy="19.5" r="1.5"></circle>
+                    </svg>
+                    <span>Cart</span>
+                </li>
+            </ul>
+        </nav>
+        <div id="dialog-Box" class="w-96 z-50 hidden border-2 bg-white absolute top-4 right-4 mt-16">
+            <div class="p-4">
+                <ul id="js-ul">
+
+                </ul>
+                <button class="bg-blue-500 text-white p-2 rounded mt-4" type="button" id="closeDialog">Close</button>
+            </div>
+        </div>
+
+        <div class="container mx-auto mt-10 p-8 bg-white rounded-lg shadow-lg">
             <div class="grid lg:grid-cols-2 md:grid-cols-1">
                 <div class="w-full overflow-hidden">
                     <div class="flex items-center justify-center">
@@ -29,11 +57,13 @@
                     <p id="js-price" class="text-blue-500 text-lg mb-4 font-semibold"></p>
                     <p id="js-discount" class="text-red-500 font-semibold mb-6  "></p>
                     <div class="mt-4 flex w-full gap-2">
-                        <button class="bg-blue-500 text-white p-1 rounded w-1/2" type="button">Add To Cart</button>
+                        <button class="bg-blue-500 text-white p-1 rounded w-1/2" id="js-addcart" type="button">Add To
+                            Cart</button>
                         <button class="bg-blue-500 text-white p-1 rounded  w-1/2" type="button">Buy Now</button>
                     </div>
                 </div>
             </div>
+
         </div>
     </main>
     <script>
@@ -49,6 +79,13 @@
             brand: document.querySelector("#js-brand"),
             imagesContainer: document.querySelector('#img-container'),
             urlId: new URLSearchParams(location.search).get('id'),
+            cartbtn: document.querySelector("#js-cart"),
+            dialogBox: document.querySelector("#dialog-Box"),
+            closedialogBox: document.querySelector("#closeDialog"),
+            addcartBtn: document.querySelector("#js-addcart"),
+            productlistingContainer: document.querySelector("#js-ul"),
+            allproducts: [],
+            cartItems: JSON.parse(localStorage.getItem('cart')) || [],
 
             product: async function () {
 
@@ -59,6 +96,8 @@
                     if (response.ok) {
 
                         let data = await response.json();
+                        this.allproducts = data;
+
 
                         if (data.id == this.urlId) {
 
@@ -83,6 +122,7 @@
                                 })
                             })
 
+
                         } else {
                             console.log("Product not found");
                         }
@@ -92,11 +132,151 @@
                     console.error(error);
 
                 }
-            }
-        }
-        
+                this.bind();
+            },
 
-        show.product()
+            cart: function () {
+
+                show.dialogBox.classList.remove("hidden");
+            },
+
+            addToCart: function () {
+
+                let products = show.cartItems;
+                console.log(products)
+
+
+
+
+                let addedProduct = document.createElement("li");
+                addedProduct.setAttribute("class", "flex gap-3 w-full products")
+                show.productlistingContainer.appendChild(addedProduct);
+
+                let productimg = document.createElement("img");
+                productimg.setAttribute("class", "h-20 w-24 object-cover");
+                productimg.setAttribute("src", show.allproducts.thumbnail);
+                addedProduct.appendChild(productimg);
+
+                let productInfo = document.createElement("div");
+                productInfo.setAttribute("class", "w-full")
+                addedProduct.appendChild(productInfo);
+
+                const inputId = `${show.allproducts.id}`;
+
+                productInfo.innerHTML = `<div class="flex w-full justify-between font-semibold"><h1>${show.allproducts.title}</h1>
+                                             <span>$:${show.allproducts.price}</span>
+                                        </div> 
+                                        <div class="flex justify-between items-center mt-4"> 
+                                            <input type="number" class="border p-1 w-12" value="1" min="1" id="inputId">
+                                            <button type="button" class=" removeProduct text-blue-500 font-semibold text-md">Remove</button>
+                                        </div>`
+                                        let inputQuantity = productInfo.querySelector("#inputId");
+
+                let productData = {
+
+                    id: show.allproducts.id,
+                    title: show.allproducts.title,
+                    price: show.allproducts.price,
+                    quantity: inputQuantity.value,
+
+                };
+
+
+               
+
+
+
+                let removeProductBtn = productInfo.querySelector(".removeProduct");
+
+                removeProductBtn.addEventListener("click", () => {
+                    addedProduct.remove();
+                    show.cartItems = show.cartItems.filter(item => item.id !== productData.id);
+                    localStorage.setItem('cart', JSON.stringify(show.cartItems));
+                });
+
+                show.updateLocalStorage(productData);
+
+                // products.forEach((item) => {
+                //     let addedProduct = document.createElement("li");
+                //     addedProduct.setAttribute("class", "flex gap-3 w-full products")
+                //     show.productlistingContainer.appendChild(addedProduct);
+
+                //     let productimg = document.createElement("img");
+                //     productimg.setAttribute("class", "h-20 w-24 object-cover");
+                //     productimg.setAttribute("src", item.thumbnail); // Use the item's thumbnail
+                //     addedProduct.appendChild(productimg);
+
+                //     let productInfo = document.createElement("div");
+                //     productInfo.setAttribute("class", "w-full")
+                //     addedProduct.appendChild(productInfo);
+
+                //     const inputId = `${item.id}`;
+
+                //     productInfo.innerHTML = `<div class="flex w-full justify-between font-semibold">
+                //                      <h1>${item.title}</h1>
+                //                      <span>$:${item.price}</span>
+                //                 </div> 
+                //                 <div class="flex justify-between items-center mt-4"> 
+                //                     <input type="number" class="border p-1 w-12" value="${item.quantity}" min="1" id="inputId">
+                //                     <button type="button" class="removeProduct text-blue-500 font-semibold text-md">Remove</button>
+                //                 </div>`;
+
+                //     let productData = {
+
+                //         id: show.allproducts.id,
+                //         title: show.allproducts.title,
+                //         price: show.allproducts.price,
+                //         quantity: inputQuantity.value,
+
+                //     };
+
+                //     let inputQuantity = productInfo.querySelector("#inputId");
+
+                //     let removeProductBtn = productInfo.querySelector(".removeProduct");
+
+                //     removeProductBtn.addEventListener("click", () => {
+                //         addedProduct.remove();
+                //         show.cartItems = show.cartItems.filter(cartItem => cartItem.id !== item.id);
+                //         localStorage.setItem('cart', JSON.stringify(show.cartItems));
+                //     });
+
+                //     show.updateLocalStorage(item);
+                // });
+
+            },
+
+            updateLocalStorage: function (productData) {
+
+                let existingProduct = this.cartItems.find(item => item.id === productData.id);
+
+                if (existingProduct) {
+                    existingProduct.quantity++;
+                } else {
+                    this.cartItems.push(productData);
+                }
+
+                localStorage.setItem('cart', JSON.stringify(this.cartItems));
+            },
+
+            bind: function () {
+
+                this.cartbtn.addEventListener("click", this.cart);
+
+                this.closedialogBox.addEventListener("click", () => {
+                    show.dialogBox.classList.add("hidden");
+                });
+
+                this.addcartBtn.addEventListener("click", this.addToCart);
+
+            },
+
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            show.product();
+        });
+
+
     </script>
 </body>
 
