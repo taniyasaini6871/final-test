@@ -1,34 +1,3 @@
-let options = {
-    key: "rzp_test_qHwqKPamC82Qrb",
-    name: "Razorpay Testing",
-    amount: "100",
-    currency: "INR",
-    description: "Test Description",
-    handler: function (response) {
-        // alert(response.razorpay_payment_id);
-        // alert(response.razorpay_order_id);
-        // alert(response.razorpay_signature);
-
-    },
-    prefill: {
-        "contact": '+919999999999',
-        "email": "taniya@test.com"
-    },
-
-    notes: {
-        address: "Mohali"
-    },
-    theme: {
-        color: "#3399cc"
-    },
-
-}
-
-var rzp1 = new Razorpay(options);
-document.getElementById('rzp-button1').onclick = function (e) {
-    rzp1.open();
-    e.preventDefault();
-}
 
 const display = {
 
@@ -41,6 +10,10 @@ const display = {
     state: document.querySelector("#state"),
     zip: document.querySelector("#zip"),
     form: document.querySelector("#form"),
+    totalAmount: document.querySelector("#totalamount"),
+    phone: document.querySelector("#phone"),
+    backbtn: document.querySelector("#back-btn"),
+
 
     getBoughtProducts: function () {
 
@@ -49,7 +22,7 @@ const display = {
         this.boughtProducts.forEach((item) => {
 
             let product = document.createElement("li");
-            product.setAttribute("class", "p-4 flex gap-3")
+            product.setAttribute("class", "p-4 flex flex-col sm:flex-row md:flex-row lg:flex-row gap-3")
             this.boughtProductsContainer.appendChild(product);
 
 
@@ -86,6 +59,34 @@ const display = {
             outerdiv.appendChild(productInfodiv2);
 
 
+            let itemQuantityContainer = document.createElement("div");
+            itemQuantityContainer.setAttribute("class", "flex border p-1 bg-gray-200 rounded-lg")
+            productInfodiv2.appendChild(itemQuantityContainer);
+
+
+
+            let minus = document.createElement("button");
+            minus.setAttribute("class", "minus outline-none");
+            minus.innerHTML = `<svg class="w-6 h-6 text-gray-700" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.5.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc. --><path d="M432 256c0 17.7-14.3 32-32 32L48 288c-17.7 0-32-14.3-32-32s14.3-32 32-32l352 0c17.7 0 32 14.3 32 32z"></path></svg>`
+            itemQuantityContainer.appendChild(minus);
+
+
+            let input = document.createElement("input");
+            input.setAttribute("type", "number");
+            input.setAttribute("value", "1");
+            input.setAttribute("readonly", "");
+            input.setAttribute("class", "w-12 bg-gray-200 rounded-lg text-center outline-none");
+            itemQuantityContainer.appendChild(input);
+
+
+
+            let plus = document.createElement("button");
+            plus.setAttribute("class", "plus outline-none");
+            plus.innerHTML = `<svg class="w-5 h-5 text-gray-700" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.5.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc. --><path d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z"></path></svg>`
+            itemQuantityContainer.appendChild(plus);
+
+
+
             let removeBtn = document.createElement("button");
             removeBtn.setAttribute("type", "button");
             removeBtn.innerHTML = "Remove";
@@ -95,41 +96,18 @@ const display = {
 
             //  to remove the product from the cart
             removeBtn.addEventListener("click", function () {
+
                 product.remove();
+
+                //  to set the total price again is product removed
+                let currentTotal = parseFloat(display.totalAmount.innerHTML.replace('$', ''));
+                display.totalAmount.innerHTML = `$${currentTotal - amount}`;
+
+                // to remove it from loaclstorage as well
                 items = items.filter(cartItem => cartItem.id !== item.id);
                 localStorage.setItem('boughtitems', JSON.stringify(items));
+
             })
-
-
-            let itemQuantityContainer = document.createElement("div");
-            itemQuantityContainer.setAttribute("class", "flex")
-            productInfodiv2.appendChild(itemQuantityContainer);
-
-
-
-            let minus = document.createElement("button");
-            minus.setAttribute("class", "minus outline-none");
-            minus.innerHTML = `<svg class="w-6 h-6 text-blue-300" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 15 15" fill="currentColor"><path fill-rule="evenodd" clip-rule="evenodd" d="M0 7.5a7.5 7.5 0 1115 0 7.5 7.5 0 01-15 0zM4 8h7V7H4v1z" fill="currentColor"></path></svg>`
-            itemQuantityContainer.appendChild(minus);
-
-
-
-            let input = document.createElement("input");
-            input.setAttribute("type", "number");
-            input.setAttribute("value", "1");
-            input.setAttribute("class", "w-12 bg-gray-200 px-2 rounded-lg");
-            itemQuantityContainer.appendChild(input);
-
-
-
-            let plus = document.createElement("button");
-            plus.setAttribute("class", "plus outline-none");
-            plus.innerHTML = `<svg class="w-6 h-6 text-blue-300" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                                <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3v-3z"></path>
-                              </svg>`
-            itemQuantityContainer.appendChild(plus);
-
-
 
             let inputValue = input.value;
             let amount = item.price;
@@ -138,59 +116,59 @@ const display = {
 
                 amount += item.price
                 price.innerHTML = `$${amount}`;
-                inputValue++;
+                inputValue++
+                input.value = inputValue;
+
+
+                let currentTotal = parseFloat(display.totalAmount.innerHTML.replace('$', ''));
+                display.totalAmount.innerHTML = `$${currentTotal + item.price}`;
+
 
             })
 
             minus.addEventListener("click", function () {
 
                 if (amount > item.price) {
+
                     amount = amount - item.price;
                     price.innerHTML = `$${amount}`;
-                    inputValue--;
+                    inputValue--
+                    input.value = inputValue;
+
+                    let currentTotal = parseFloat(display.totalAmount.innerHTML.replace('$', ''));
+                    display.totalAmount.innerHTML = `$${currentTotal - item.price}`;
+
                 }
 
             })
 
         })
-
         this.bind()
 
     },
 
     subtotal: function () {
 
-        let totalAmount = document.createElement("dl");
-        totalAmount.setAttribute("class", "flex justify-between px-4 border-t-2 py-6")
-        this.boughtProductsContainer.appendChild(totalAmount);
-
-        let dt = document.createElement("dt");
-        dt.setAttribute("class", "text-gray-500 font-semibold");
-        dt.innerHTML = "Total"
-        totalAmount.appendChild(dt);
-
-        let dd = document.createElement("dd");
-        dd.setAttribute("class", "font-semibold");
-        totalAmount.appendChild(dd);
-
         let subtotal = 0;
 
         if (this.boughtProducts) {
+
             this.boughtProducts.forEach((item) => {
                 subtotal += item.price;
             });
+
         } else {
             subtotal = 0;
         }
 
+        this.totalAmount.innerHTML = `$${subtotal}`;
 
-        dd.innerHTML = `$${subtotal}`;
     },
-    formValidations: function () {
-        let formData = new FormData(this.form);
 
-        let firstnameError = document.querySelector("#fname-Error")
-         
+    formValidations: function () {
+
+
+        let firstnameError = document.querySelector("#fname-Error");
         this.firstname.addEventListener("input", () => {
             if (!/^[a-zA-Z]+$/.test(this.firstname.value)) {
                 firstnameError.innerHTML = 'First Name should contain only alphabets.';
@@ -200,14 +178,199 @@ const display = {
             }
         })
 
-        // pending not completed yet
-               
-        
+
+        let lastnameError = document.querySelector("#lname-Error");
+        this.lastname.addEventListener("input", () => {
+            if (!/^[a-zA-Z]+$/.test(this.lastname.value)) {
+                lastnameError.innerHTML = 'Last Name should contain only alphabets.';
+            }
+            if (this.lastname.value === "" || /^[a-zA-Z]+$/.test(this.lastname.value)) {
+                lastnameError.innerHTML = '';
+            }
+        })
+
+
+        let addressError = document.querySelector("#address-Error")
+        this.address.addEventListener("input", () => {
+            if (this.address.value === "") {
+                addressError.innerHTML = 'Address cannot be empty.';
+            } else {
+                addressError.innerHTML = '';
+            }
+        })
+
+
+        let cityError = document.querySelector("#city-Error")
+        this.city.addEventListener("input", () => {
+            if (!/^[a-zA-Z]+$/.test(this.city.value)) {
+                cityError.innerHTML = 'City should contain only alphabets.';
+            }
+            if (this.city.value === "" || /^[a-zA-Z]+$/.test(this.city.value)) {
+                cityError.innerHTML = '';
+            }
+        })
+
+
+        let stateError = document.querySelector("#state-Error")
+        this.state.addEventListener("input", () => {
+            if (!/^[a-zA-Z]+$/.test(this.state.value)) {
+                stateError.innerHTML = 'State should contain only alphabets.';
+            }
+            if (this.state.value === "" || /^[a-zA-Z]+$/.test(this.state.value)) {
+                stateError.innerHTML = '';
+            }
+        })
+
+
+        let zipError = document.querySelector("#zip-Error")
+        this.zip.addEventListener("input", () => {
+            if (!/^\d{5}$/.test(this.zip.value)) {
+                zipError.innerHTML = 'Zip code should be a 5-digit number.';
+            }
+            if (/^\d{5}$/.test(this.zip.value) || this.zip.value === "") {
+                zipError.innerHTML = '';
+            }
+        })
+
+
+        let phoneError = document.querySelector("#phone-Error")
+        this.phone.addEventListener("input", () => {
+            if (!/^\d{10}$/.test(this.phone.value)) {
+                phoneError.innerHTML = 'Phone number should be a 10-digit number.';
+            }
+            if (/^\d{10}$/.test(this.phone.value) || this.phone.value === "") {
+                phoneError.innerHTML = '';
+            }
+        })
+
+
+        let options = {
+
+            key: "rzp_test_qHwqKPamC82Qrb",
+            order_id: "order_N9qn711Jg0nw0w",  // here you need to add new orderId everytime to make new payment using postman
+            amount: 1000000,
+            currency: "INR",
+            name: "Razorpay Testing",
+            description: "Test Description",
+            handler: function (response) {
+
+                localStorage.setItem("response", JSON.stringify(response));
+
+                // here after payment successfull we are navigating to producthistory page to see payment details
+                window.location.href = "http://127.0.0.1:5500/src/TEST/producthistory.html";
+            },
+
+            prefill: {
+
+                "name": 'Taniya',
+                "contact": '1234567890',
+                "email": "taniya@test.com"
+            },
+
+            notes: {
+                address: this.address.value
+            },
+            theme: {
+                color: "#3399cc"
+            },
+
+        }
+
+        var rzp1 = new Razorpay(options);
+
+        document.getElementById('rzp-button1').onclick = function (e) {
+
+            // before making payment this function is ensuring all form fields are filled
+            let isFormValid = display.validateForm();
+
+            if (isFormValid) {
+
+                let formData = new FormData(this.form);
+
+                // get response keys and put it in the object to display payment and order id on producthistory page
+                let responseItems = JSON.parse(localStorage.getItem('response')) || [];
+
+                let orderItems = JSON.parse(localStorage.getItem('orderData')) || [];
+
+                let obj = {
+
+                    totalPrice: display.totalAmount.innerHTML,
+                    orderId: responseItems.razorpay_order_id,
+                    paymentId: responseItems.razorpay_payment_id,
+
+                };
+
+                for (const [key, value] of formData.entries()) {
+                    obj[key] = value;
+                }
+
+                orderItems.push(obj);
+                localStorage.setItem("orderData", JSON.stringify(orderItems));
+                rzp1.open();
+                e.preventDefault();
+
+
+            } else {
+
+                display.showErrorIfEmpty(display.firstname, firstnameError, 'First Name');
+                display.showErrorIfEmpty(display.lastname, lastnameError, 'Last Name');
+                display.showErrorIfEmpty(display.address, addressError, 'Address');
+                display.showErrorIfEmpty(display.city, cityError, 'City');
+                display.showErrorIfEmpty(display.state, stateError, 'State');
+
+                if (!/^\d{5}$/.test(display.zip.value)) {
+                    zipError.innerHTML = 'Zip code should be a 5-digit number.';
+                }
+
+                if (!/^\d{10}$/.test(display.phone.value)) {
+                    phoneError.innerHTML = 'Phone number should be a 10-digit number.';
+                }
+
+            }
+        }
+
     },
-    bind : function () {
-         this.subtotal()
-         this.formValidations()
+
+    validateForm: function () {
+
+        return (
+
+            this.firstname.value.trim() !== "" &&
+            this.lastname.value.trim() !== "" &&
+            this.address.value.trim() !== "" &&
+            this.city.value.trim() !== "" &&
+            this.state.value.trim() !== "" &&
+            /^\d{5}$/.test(this.zip.value) &&
+            /^\d{10}$/.test(this.phone.value)
+
+        );
+    },
+
+    showErrorIfEmpty: function (field, errorElement, fieldName) {
+
+        if (field.value.trim() === "") {
+
+            errorElement.innerHTML = `Please fill in the ${fieldName}.`;
+
+        } else {
+
+            errorElement.innerHTML = '';
+
+        }
+    },
+
+    bind: function () {
+
+        this.subtotal();
+
+        this.formValidations();
+
+        this.backbtn.addEventListener("click", function () {
+            window.location.href = "productlisting.html"
+        });
+
     }
+
 }
 
 display.getBoughtProducts();

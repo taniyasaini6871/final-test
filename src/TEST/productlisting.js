@@ -43,7 +43,7 @@ const show = {
         products.forEach(item => {
 
             let boundry = document.createElement("div");
-            boundry.setAttribute('class', "mb-8 h-full");
+            boundry.setAttribute('class', "mb-8 px-3");
             this.productListingContainer.appendChild(boundry);
 
             let innerBoundry = document.createElement("div");
@@ -54,18 +54,21 @@ const show = {
             imgContainer.setAttribute("class","w-full h-48 object-contain");
             imgContainer.setAttribute("src", item.thumbnail);
             innerBoundry.appendChild(imgContainer);
+
+            // this helps when u click on the image you can view it in bigger vision
             let viewer = new Viewer(imgContainer);
 
             let productInfoConatiner = document.createElement("div");
-            productInfoConatiner.setAttribute("class","px-6 py-4 flex justify-between items-center");
+            productInfoConatiner.setAttribute("class","py-4 flex mb-2 justify-between items-center");
             innerBoundry.appendChild(productInfoConatiner);
 
-            let title = document.createElement("p");
+            let title = document.createElement("h3");
+            title.setAttribute("class","font-semibold");
             title.innerHTML = item.title;
             productInfoConatiner.appendChild(title);
 
             let price = document.createElement("p");
-            price.setAttribute("class","text-gray-900");
+            price.setAttribute("class","font-bold text-gray-700");
             price.innerHTML = `$${item.price}`;
             productInfoConatiner.appendChild(price);
 
@@ -75,9 +78,18 @@ const show = {
             btn.setAttribute("class","addCart bg-blue-500 hover:bg-blue-700 text-white font-semibold py-1 px-2 rounded");
             innerBoundry.append(btn);
 
+            let cartItems = JSON.parse(localStorage.getItem('boughtitems')) || [];
+            show.cartProductsNumber.innerHTML = cartItems.length;
+
             btn.addEventListener("click" , function () {
-                let cartItems = JSON.parse(localStorage.getItem('boughtitems')) || [];
-                show.cartProductsNumber.innerHTML = cartItems.length;
+                
+                btn.innerHTML = "Added";
+                btn.classList.add("bg-green-500");
+                btn.classList.remove("hover:bg-blue-700");
+                btn.setAttribute("disabled", ""); 
+
+                show.cartProductsNumber.innerHTML = cartItems.length + 1;
+
                 let existingBoughtItems = JSON.parse(localStorage.getItem('boughtitems')) || [];
                 
                         const boughtProductInfo = {
@@ -89,10 +101,12 @@ const show = {
                 
                         }
 
-                  existingBoughtItems.push(boughtProductInfo);
-                  localStorage.setItem('boughtitems', JSON.stringify(existingBoughtItems));
+                existingBoughtItems.push(boughtProductInfo);
+                localStorage.setItem('boughtitems', JSON.stringify(existingBoughtItems));
                 
             });
+
+            
         })
 
           
@@ -106,12 +120,18 @@ const show = {
     bind : function (arr) {
 
         this.listProducts(arr);
-        this.filterProductsAsPerCategory(arr);  
+
+        this.filterProductsAsPerCategory(arr); 
+
         this.updateToLocalStorage(arr);
+
         this.creatingOptions();
+
         this.myCartBtn.addEventListener("click" , function () {
+
             window.location.href = "http://127.0.0.1:5500/src/TEST/boughtproducts.html";
         })
+
         this.search.addEventListener('input', debouceFunctionality(searchFunctionality, 500));
     },
 
@@ -125,10 +145,12 @@ const show = {
 
                 const data = await response.json();
 
+
                 let allOption = document.createElement('option');
                 allOption.setAttribute("value", "all");
                 allOption.innerHTML = "All";
                 this.selectedFilter.appendChild(allOption);
+
 
                 data.forEach((category) => {
                     let option = document.createElement('option');
@@ -136,6 +158,8 @@ const show = {
                     option.innerHTML = category;
                     this.selectedFilter.appendChild(option);
                 });
+
+
             }
 
             if (!response.ok) {
@@ -170,6 +194,7 @@ const show = {
 
                     let response = await fetch(`${this.baseUrl}/products/category/${selectedFilterValue}`);
 
+
                     if (response.ok) {
 
                         let jsonData = await response.json();
@@ -189,7 +214,6 @@ const show = {
                 }
 
             }
-        
 
         });
     },
